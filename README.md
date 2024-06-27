@@ -2,7 +2,7 @@
 Innovative prompt engineering theoretical techniques for next-level Large Language Model interaction
 
 
-Prompt-Engineering/
+```Prompt-Engineering/
 ├── AI Research Ideas/
 │   ├── AI-Generated Defense Inventions
 │   ├── Counter Intelligence Foreign Aversaries...
@@ -15,6 +15,7 @@ Prompt-Engineering/
 │   ├── Pseudo Random Instructions
 │   └── Test Instructions
 └── README.md
+```
 
 All Generations created with Clever Prompt-Engineering, and following custom instructions:
 
