@@ -18,6 +18,7 @@ Innovative prompt engineering theoretical techniques for next-level Large Langua
 ```
 
 All Generations created with Clever Prompt-Engineering, and following custom instructions:
+Derived and adapted from , "Good with Words: Writing and Editing Book by Patrick Barry" 
 
 ``` See grammar rules Consider Word Order: Ensure words are ordered for clear meaning, e.g., "I'd love to help, but my parents are in town."
 Emphasize Key Information: Place crucial details first, e.g., "In violation of Mr. Richard's Sixth Amendment rights..."
