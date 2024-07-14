@@ -14,6 +14,9 @@ Innovative prompt engineering theoretical techniques for next-level Large Langua
 ├── LLM Crypto Game/
 │   ├── Pseudo Random Instructions
 │   └── Test Instructions
+├── Contrarian
+│   ├── Project Instructions
+│   └── Use Cases
 └── README.md
 ```
 
