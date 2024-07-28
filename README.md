@@ -1,24 +1,7 @@
 # Prompt-Engineering
 Innovative prompt engineering theoretical techniques for next-level Large Language Model interaction
 
-
-```Prompt-Engineering/
-├── AI Research Ideas/
-│   ├── AI-Generated Defense Inventions
-│   ├── Counter Intelligence Foreign Aversaries...
-│   ├── Decoding the Ancients: Emoji-Translation...
-│   ├── Mapping Musical Frequencies via FMRI...
-│   ├── Predicting Earth's Linguistic Future...
-│   ├── Temporal Synthesis through Simulated Realities...
-│   └── Unveiling Novel Research Questions through Sentiment Analysis...
-├── LLM Crypto Game/
-│   ├── Pseudo Random Instructions
-│   └── Test Instructions
-├── Contrarian
-│   ├── Project Instructions
-│   └── Use Cases
-└── README.md
-```
+# Tools to assist with Prompt Engineering
 
 All Generations created with Clever Prompt-Engineering, and following custom instructions:
 Derived and adapted from , "Good with Words: Writing and Editing Book by Patrick Barry" 
