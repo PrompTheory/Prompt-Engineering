@@ -1,0 +1,110 @@
+# Stock Forecasting Application Project Overview
+
+## 1. Project Description
+Develop a Python-based stock forecasting application that allows users to make predictions on stock price movements for a dataset of 100 stocks. The application will track prediction accuracy using the Brier Score and provide long-term performance analysis.
+
+## 2. Key Features
+- Manage a dataset of 100 stocks (TICKER, Company Name)
+- Allow users to enter predictions for stock price movements
+- Calculate and track prediction accuracy using Brier Score
+
+- Intitial Iteration (V.1) will just SAVE a text file or a CSV with the Stock Ticker,
+
+1. Stock Ticker shows, Current Price Shows.
+2. Enter Prediction (Price Raises or Lowers in X(1,3,12) months. 
+2.A "Theres a 70% chance that APPL will rise in next week. .7 
+3. After specified time, user uploads their original .txt. Dataset with current prices calculates brier score .
+
+
+## 3. Technical Implementation
+
+### 3.1 Data Management
+- Use pandas DataFrames to store and manipulate stock data and predictions
+- Implement data structures to associate predictions with stocks and timestamps
+
+### 3.2 Brier Score Calculation
+The Brier Score measures the accuracy of probabilistic predictions. For stock price predictions:
+
+1. For each prediction:
+   - Prediction (ft): Probability assigned to the stock rising (e.g., 0.7 for 70% chance of rising)
+   - Outcome (ot): 1 if the stock price rose, 0 if it fell or remained the same
+
+2. Calculate the Brier Score using the formula:
+   BS = (1/N) * Σ(ft - ot)^2
+   Where N is the total number of predictions
+
+3. Implementation in Python:
+```python
+import numpy as np
+
+def calculate_brier_score(predictions, outcomes):
+    return np.mean((predictions - outcomes) ** 2)
+```
+
+### 3.3 Long-term Tracking
+To track performance over time:
+
+1. Store each prediction with:
+   - Stock ticker
+   - Prediction timestamp
+   - Prediction probability
+   - Actual outcome
+   - Calculated Brier Score
+
+2. Implement functions to analyze performance:
+   - Calculate rolling Brier Score (e.g., last 30 days, last 100 predictions)
+   - Compare performance across different stocks or sectors
+   - Track improvement over time
+
+Example Python structure:
+```python
+import pandas as pd
+
+class PredictionTracker:
+    def __init__(self):
+        self.predictions = pd.DataFrame(columns=['Ticker', 'Timestamp', 'Prediction', 'Outcome', 'BrierScore'])
+
+    def add_prediction(self, ticker, timestamp, prediction, outcome):
+        brier_score = (prediction - outcome) ** 2
+        new_row = pd.DataFrame({'Ticker': [ticker], 'Timestamp': [timestamp], 
+                                'Prediction': [prediction], 'Outcome': [outcome], 
+                                'BrierScore': [brier_score]})
+        self.predictions = pd.concat([self.predictions, new_row], ignore_index=True)
+
+    def get_rolling_brier_score(self, window=30):
+        return self.predictions['BrierScore'].rolling(window=window).mean()
+
+    def get_performance_by_stock(self):
+        return self.predictions.groupby('Ticker')['BrierScore'].mean()
+```
+
+## 4. Key Components
+
+### 4.1 Data Input and Storage
+- Implement functions to input and update stock data
+- Create a system for users to enter predictions
+
+### 4.2 Prediction Evaluation
+- Develop a mechanism to compare predictions against actual stock performance
+- Implement the Brier Score calculation
+
+### 4.3 Performance Analysis
+- Create functions for various performance metrics (e.g., accuracy over time, performance by stock)
+- Implement data visualization using libraries like Matplotlib or Seaborn
+
+### 4.4 User Interface
+- Develop a command-line interface for interacting with the application
+- Consider future expansion to a graphical interface using libraries like Tkinter or PyQt
+
+## 5. Future Enhancements
+- Implement machine learning models for automated predictions
+- Expand the stock dataset beyond 100 stocks
+- Develop a web-based interface for broader accessibility
+- Integrate real-time stock data feeds
+
+## 6. Next Steps
+1. Set up the Python development environment
+2. Implement the core data structures and Brier Score calculation
+3. Develop the basic command-line interface
+4. Begin testing with a small subset of stocks
+5. Gradually expand functionality and test with the full dataset
