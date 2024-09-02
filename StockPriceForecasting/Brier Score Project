@@ -15,6 +15,8 @@ Develop a Python-based stock forecasting application that allows users to make p
 2.A "Theres a 70% chance that APPL will rise in next week. .7 
 3. After specified time, user uploads their original .txt. Dataset with current prices calculates brier score .
 
+GAMIFICATION IDEA:
+1/5/10 minute increment to research the stock to make an educated guess short hand. 
 
 ## 3. Technical Implementation
 
