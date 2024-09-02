@@ -1,0 +1,117 @@
+import random
+from datetime import datetime, timedelta
+import readchar
+
+class StockPrediction:
+    def __init__(self):
+        self.predictions = []
+
+    def get_user_input(self, prompt, valid_inputs):
+        while True:
+            user_input = input(prompt).lower()
+            if user_input in valid_inputs:
+                return user_input
+            print("Invalid input. Please try again.")
+
+    def get_float_input(self, prompt, min_val, max_val):
+        while True:
+            try:
+                user_input = float(input(prompt))
+                if min_val <= user_input <= max_val:
+                    return user_input
+                print(f"Please enter a number between {min_val} and {max_val}.")
+            except ValueError:
+                print("Invalid input. Please enter a number.")
+
+    def get_user_predictions(self):
+        while True:
+            try:
+                num_stocks = int(input("How many stocks would you like to make predictions on? "))
+                if num_stocks > 0:
+                    break
+                print("Please enter a positive number.")
+            except ValueError:
+                print("Invalid input. Please enter a number.")
+        
+        # User selects the time frame for all predictions
+        print("\nSelect a time frame for your predictions:")
+        print("1. 1 month")
+        print("2. 3 months")
+        print("3. 1 year")
+        
+        timeframe_choice = self.get_user_input("Enter your choice (1, 2, or 3): ", ['1', '2', '3'])
+        
+        timeframe_map = {'1': 1, '2': 3, '3': 12}
+        timeframe = timeframe_map[timeframe_choice]
+        timeframe_str = f"{timeframe} month{'s' if timeframe > 1 else ''}"
+        
+        print(f"\nMaking predictions for {num_stocks} stocks over {timeframe_str}.")
+        
+        for _ in range(num_stocks):
+            self.get_single_prediction(timeframe, timeframe_str)
+
+    def get_single_prediction(self, timeframe, timeframe_str):
+        stock = "PLACEHOLDER"  # Replace with actual stock ticker later
+        price = 100.00  # Replace with actual stock price later
+        
+        print(f"\nStock: {stock}")
+        print(f"Current Price: ${price:.2f}")
+        
+        movement = random.choice(["rise", "fall"])
+        print(f"The stock will {movement} in the next {timeframe_str}.")
+        
+        user_prediction = self.get_user_input("Enter 'true' if you agree, 'false' if you disagree: ", ['true', 'false'])
+        
+        confidence = self.get_float_input("Enter your confidence level (0-1): ", 0, 1)
+        
+        prediction = {
+            'stock': stock,
+            'price': price,
+            'movement': movement,
+            'timeframe': timeframe,
+            'user_prediction': user_prediction == 'true',
+            'confidence': confidence,
+            'timestamp': datetime.now(),
+            'evaluation_date': datetime.now() + timedelta(days=30*timeframe)
+        }
+        
+        self.predictions.append(prediction)
+        print("Prediction recorded!")
+
+    def display_predictions(self):
+        if not self.predictions:
+            print("No predictions recorded yet.")
+            return
+        
+        print("\nYour Predictions:")
+        for idx, pred in enumerate(self.predictions, 1):
+            timeframe_str = f"{pred['timeframe']} month{'s' if pred['timeframe'] > 1 else ''}"
+            print(f"\n{idx}. Stock: {pred['stock']}")
+            print(f"   Predicted {'rise' if pred['user_prediction'] else 'fall'} in {timeframe_str}")
+            print(f"   with {pred['confidence']:.2f} confidence")
+            print(f"   Made on: {pred['timestamp'].strftime('%Y-%m-%d %H:%M:%S')}")
+            print(f"   To be evaluated on: {pred['evaluation_date'].strftime('%Y-%m-%d')}")
+
+def main():
+    predictor = StockPrediction()
+    
+    while True:
+        print("\n1. Make predictions")
+        print("2. View predictions")
+        print("3. Exit")
+        print("Press the number key for your choice...")
+        
+        choice = readchar.readkey()
+        
+        if choice == '1':
+            predictor.get_user_predictions()
+        elif choice == '2':
+            predictor.display_predictions()
+        elif choice == '3':
+            print("\nThank you for using the Stock Prediction App!")
+            break
+        else:
+            print("Invalid choice. Please try again.")
+
+if __name__ == "__main__":
+    main()
