@@ -18,6 +18,12 @@ Develop a Python-based stock forecasting application that allows users to make p
 GAMIFICATION IDEA:
 1/5/10 minute increment to research the stock to make an educated guess short hand. 
 
+
+LONG TERM GOAL - TRAIN PROGRAM TO FORECAST STOCK PRICES
+- Data Trained with random historic stock price, (last 15 or so years)
+- Educated Guess based on information dated BEFORE the time period to predict stock price. datastreams of content related to stock analysis
+- Program with Machine Learning finds out whether or not that specific information led to a correct or non-correct prediction, training model. 
+
 ## 3. Technical Implementation
 
 ### 3.1 Data Management
