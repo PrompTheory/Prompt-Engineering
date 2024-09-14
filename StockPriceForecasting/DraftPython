@@ -1,83 +1,105 @@
 import random
-from datetime import datetime, timedelta
-import readchar
-import yfinance as yf
-import csv
+import json
 import os
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
+import yfinance as yf
 
 class StockPrediction:
     def __init__(self):
+        """Initialize the StockPrediction class."""
         self.predictions = []
-        self.filename = "stock_predictions.csv"
+        self.filename = "stock_predictions.json"
         self.load_predictions()
         self.stock_tickers = [
             # Tech Giants
-            "AAPL", "MSFT", "AMZN", "GOOGL", "FB", "TSLA", "NVDA", "ADBE", "CRM", "INTC", 
+            "AAPL", "MSFT", "AMZN", "GOOGL", "META", "TSLA", "NVDA", "ADBE", "CRM", "INTC",
             "CSCO", "ORCL", "IBM", "ACN", "AMD", "QCOM", "TXN", "AVGO", "MU", "AMAT",
-            
             # Financial Services
-            "BRK-B", "JPM", "V", "MA", "BAC", "WFC", "C", "AXP", "MS", "GS", 
+            "BRK-B", "JPM", "V", "MA", "BAC", "WFC", "C", "AXP", "MS", "GS",
             "SCHW", "SPGI", "BLK", "CME", "ICE", "CB", "PNC", "TRV", "AIG", "MET",
-            
             # Healthcare
-            "JNJ", "UNH", "PFE", "ABT", "ABBV", "MRK", "TMO", "LLY", "DHR", "BMY", 
+            "JNJ", "UNH", "PFE", "ABT", "ABBV", "MRK", "TMO", "LLY", "DHR", "BMY",
             "AMGN", "MDT", "ISRG", "GILD", "VRTX", "BIIB", "REGN", "BSX", "ZBH", "ILMN",
-            
             # Consumer Goods & Retail
-            "WMT", "PG", "HD", "KO", "PEP", "COST", "NKE", "MCD", "SBUX", "TGT", 
+            "WMT", "PG", "HD", "KO", "PEP", "COST", "NKE", "MCD", "SBUX", "TGT",
             "LOW", "EL", "CL", "KMB", "GIS", "K", "HSY", "SYY", "CAG", "HRL",
-            
             # Industrial & Energy
-            "XOM", "CVX", "GE", "BA", "LMT", "RTX", "HON", "UNP", "UPS", "CAT", 
+            "XOM", "CVX", "GE", "BA", "LMT", "RTX", "HON", "UNP", "UPS", "CAT",
             "DE", "MMM", "EMR", "ETN", "ITW", "NSC", "WM", "RSG", "ROK", "CMI",
-            
             # Telecommunications & Media
             "VZ", "T", "CMCSA", "NFLX", "DIS", "CHTR", "TMUS", "ATVI", "EA", "TTWO",
-            
             # Others
             "PYPL", "SQ", "COP", "PM", "AMT", "BDX", "APD", "ECL", "SHW", "LIN"
         ]
         self.used_tickers = set()
 
-        
     def get_user_input(self, prompt, valid_inputs):
+        """Prompt the user for input until a valid response is received."""
         while True:
-            user_input = input(prompt).lower()
+            user_input = input(prompt).strip().lower()
             if user_input in valid_inputs:
                 return user_input
-            print("Invalid input. Please try again.")
+            print(f"Invalid input. Please enter one of the following: {', '.join(valid_inputs)}.")
 
     def get_float_input(self, prompt, min_val, max_val):
+        """Prompt the user for a float input within a specified range."""
         while True:
+            user_input = input(prompt)
             try:
-                user_input = float(input(prompt))
+                user_input = float(user_input)
                 if min_val <= user_input <= max_val:
                     return user_input
-                print(f"Please enter a number between {min_val} and {max_val}.")
+                else:
+                    print(f"Please enter a number between {min_val} and {max_val}.")
             except ValueError:
-                print("Invalid input. Please enter a number.")
+                print("Invalid input. Please enter a valid number.")
 
     def get_random_ticker(self):
+        """Select a random stock ticker that hasn't been used yet."""
         available_tickers = list(set(self.stock_tickers) - self.used_tickers)
         if not available_tickers:
             print("All tickers have been used. Resetting the list.")
             self.used_tickers.clear()
             available_tickers = self.stock_tickers
-        
-        ticker = random.choice(available_tickers)
-        self.used_tickers.add(ticker)
-        return ticker
 
-    def get_stock_data(self, ticker):
+        while available_tickers:
+            ticker = random.choice(available_tickers)
+            if self.validate_ticker(ticker):
+                self.used_tickers.add(ticker)
+                return ticker
+            else:
+                available_tickers.remove(ticker)
+        # If no valid tickers found, reset the used tickers and try again
+        self.used_tickers.clear()
+        return self.get_random_ticker()
+
+    def validate_ticker(self, ticker):
+        """Validate if a ticker is valid and has available data."""
         try:
             stock = yf.Ticker(ticker)
-            current_price = stock.info['currentPrice']
-            return current_price
-        except:
-            print(f"Error fetching data for {ticker}. Using placeholder data.")
-            return 100.00  # Placeholder price
+            if 'longName' in stock.info:
+                return True
+        except Exception as e:
+            pass
+        return False
+
+    def get_stock_data(self, ticker):
+        """Retrieve stock data including current price and company name."""
+        try:
+            stock = yf.Ticker(ticker)
+            data = stock.history(period="1d")
+            if data.empty:
+                raise ValueError("No data found")
+            current_price = data['Close'][0]
+            company_name = stock.info.get('longName', 'N/A')
+            return current_price, company_name
+        except Exception as e:
+            print(f"Error fetching data for {ticker}: {e}. Using placeholder data.")
+            return 100.00, 'N/A'  # Placeholder price and name
 
     def get_user_predictions(self):
+        """Collect user predictions for a number of stocks."""
         while True:
             try:
                 num_stocks = int(input("How many stocks would you like to make predictions on? "))
@@ -86,150 +108,135 @@ class StockPrediction:
                 print("Please enter a positive number.")
             except ValueError:
                 print("Invalid input. Please enter a number.")
-        
+
         print("\nSelect a time frame for your predictions:")
         print("1. 1 month")
         print("2. 3 months")
-        print("3. 1 year")
-        
-        timeframe_choice = self.get_user_input("Enter your choice (1, 2, or 3): ", ['1', '2', '3'])
-        
-        timeframe_map = {'1': 1, '2': 3, '3': 12}
+        print("3. 6 months")
+        print("4. 1 year")
+
+        timeframe_choice = self.get_user_input("Enter your choice (1-4): ", ['1', '2', '3', '4'])
+
+        timeframe_map = {'1': 1, '2': 3, '3': 6, '4': 12}
         timeframe = timeframe_map[timeframe_choice]
         timeframe_str = f"{timeframe} month{'s' if timeframe > 1 else ''}"
-        
+
         print(f"\nMaking predictions for {num_stocks} stocks over {timeframe_str}.")
-        
+
         for _ in range(num_stocks):
             self.get_single_prediction(timeframe, timeframe_str)
-        
+
         self.save_predictions()
 
     def get_single_prediction(self, timeframe, timeframe_str):
+        """Collect a single prediction from the user."""
         stock = self.get_random_ticker()
-        price = self.get_stock_data(stock)
-        
-        print(f"\nSelected stock: {stock}")
+        price, company_name = self.get_stock_data(stock)
+
+        print(f"\nStock: {stock} - {company_name}")
         print(f"Current Price: ${price:.2f}")
-        
-        movement = random.choice(["rise", "fall"])
-        print(f"The stock will {movement} in the next {timeframe_str}.")
-        
-        user_prediction = self.get_user_input("Enter 'true' if you agree, 'false' if you disagree: ", ['true', 'false'])
-        
+
+        user_prediction = self.get_user_input(
+            f"Do you think {company_name} ({stock}) will rise or fall in the next {timeframe_str}? (rise/fall): ",
+            ['rise', 'fall']
+        )
+
         confidence = self.get_float_input("Enter your confidence level (0-1): ", 0, 1)
-        
+
         prediction = {
             'stock': stock,
+            'company_name': company_name,
             'price': price,
-            'movement': movement,
             'timeframe': timeframe,
-            'user_prediction': user_prediction == 'true',
+            'user_prediction': user_prediction,
             'confidence': confidence,
-            'timestamp': datetime.now(),
-            'evaluation_date': datetime.now() + timedelta(days=30*timeframe)
+            'timestamp': datetime.now().isoformat(),
+            'evaluation_date': (datetime.now() + relativedelta(months=timeframe)).isoformat(),
+            'evaluated': False,
+            'is_correct': None,
+            'actual_price': None
         }
-    
-        self.predictions.append(prediction)
-        print("Prediction recorded!")
 
-    def get_stock_data(self, ticker):
-        try:
-            stock = yf.Ticker(ticker)
-            current_price = stock.info['currentPrice']
-            return current_price
-        except:
-            print(f"Error fetching data for {ticker}. Using placeholder data.")
-            return 100.00  # Placeholder price
-
-
-    def get_single_prediction(self, timeframe, timeframe_str):
-        stock = self.get_random_ticker()
-        price = self.get_stock_data(stock)
-        
-        print(f"\nStock: {stock}")
-        print(f"Current Price: ${price:.2f}")
-        
-        movement = random.choice(["rise", "fall"])
-        print(f"The stock will {movement} in the next {timeframe_str}.")
-        
-        user_prediction = self.get_user_input("Enter 'true' if you agree, 'false' if you disagree: ", ['true', 'false'])
-        
-        confidence = self.get_float_input("Enter your confidence level (0-1): ", 0, 1)
-        
-        prediction = {
-            'stock': stock,
-            'price': price,
-            'movement': movement,
-            'timeframe': timeframe,
-            'user_prediction': user_prediction == 'true',
-            'confidence': confidence,
-            'timestamp': datetime.now(),
-            'evaluation_date': datetime.now() + timedelta(days=30*timeframe)
-        }
-        
         self.predictions.append(prediction)
         print("Prediction recorded!")
 
     def display_predictions(self):
+        """Display all predictions made by the user."""
         if not self.predictions:
             print("No predictions recorded yet.")
             return
-        
+
         print("\nYour Predictions:")
         for idx, pred in enumerate(self.predictions, 1):
             timeframe_str = f"{pred['timeframe']} month{'s' if pred['timeframe'] > 1 else ''}"
-            print(f"\n{idx}. Stock: {pred['stock']}")
-            print(f"   Current Price: ${pred['price']:.2f}")
-            print(f"   Predicted {'rise' if pred['user_prediction'] else 'fall'} in {timeframe_str}")
-            print(f"   with {pred['confidence']:.2f} confidence")
-            print(f"   Made on: {pred['timestamp'].strftime('%Y-%m-%d %H:%M:%S')}")
-            print(f"   To be evaluated on: {pred['evaluation_date'].strftime('%Y-%m-%d')}")
+            print(f"\n{idx}. Stock: {pred['stock']} - {pred['company_name']}")
+            print(f"   Current Price at Prediction: ${pred['price']:.2f}")
+            print(f"   Predicted to {pred['user_prediction']} in {timeframe_str}")
+            print(f"   Confidence Level: {pred['confidence']:.2f}")
+            print(f"   Made on: {datetime.fromisoformat(pred['timestamp']).strftime('%Y-%m-%d %H:%M:%S')}")
+            print(f"   Evaluation Date: {datetime.fromisoformat(pred['evaluation_date']).strftime('%Y-%m-%d')}")
+            if pred.get('evaluated'):
+                print(f"   Actual Price on Evaluation Date: ${pred['actual_price']:.2f}")
+                print(f"   Prediction was {'correct' if pred['is_correct'] else 'incorrect'}.")
 
     def save_predictions(self):
-        with open(self.filename, 'w', newline='') as csvfile:
-            fieldnames = ['stock', 'price', 'movement', 'timeframe', 'user_prediction', 'confidence', 'timestamp', 'evaluation_date']
-            writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-            
-            writer.writeheader()
-            for pred in self.predictions:
-                writer.writerow(pred)
-        
+        """Save predictions to a JSON file."""
+        with open(self.filename, 'w') as jsonfile:
+            json.dump(self.predictions, jsonfile)
         print(f"Predictions saved to {self.filename}")
 
     def load_predictions(self):
+        """Load predictions from a JSON file."""
         if not os.path.exists(self.filename):
             return
-        
-        with open(self.filename, 'r') as csvfile:
-            reader = csv.DictReader(csvfile)
-            for row in reader:
-                row['price'] = float(row['price'])
-                row['timeframe'] = int(row['timeframe'])
-                row['user_prediction'] = row['user_prediction'] == 'True'
-                row['confidence'] = float(row['confidence'])
-                row['timestamp'] = datetime.fromisoformat(row['timestamp'])
-                row['evaluation_date'] = datetime.fromisoformat(row['evaluation_date'])
-                self.predictions.append(row)
-        
+        with open(self.filename, 'r') as jsonfile:
+            self.predictions = json.load(jsonfile)
         print(f"Loaded {len(self.predictions)} predictions from {self.filename}")
+
+    def evaluate_predictions(self):
+        """Evaluate predictions where the evaluation date has passed."""
+        print("\nEvaluating Predictions:")
+        for pred in self.predictions:
+            if not pred.get('evaluated') and datetime.now() >= datetime.fromisoformat(pred['evaluation_date']):
+                current_price, _ = self.get_stock_data(pred['stock'])
+                price_change = current_price - pred['price']
+                actual_movement = 'rise' if price_change > 0 else 'fall' if price_change < 0 else 'no change'
+                is_correct = (pred['user_prediction'] == actual_movement)
+                pred['evaluated'] = True
+                pred['is_correct'] = is_correct
+                pred['actual_price'] = current_price
+                print(f"\nStock: {pred['stock']} - {pred['company_name']}")
+                print(f"Predicted to {pred['user_prediction']}, Actual movement: {actual_movement}")
+                print(f"Prediction was {'correct' if is_correct else 'incorrect'}.")
+        self.save_predictions()
+
+    def reset_predictions(self):
+        """Reset all saved predictions."""
+        self.predictions.clear()
+        self.save_predictions()
+        print("All predictions have been reset.")
 
 def main():
     predictor = StockPrediction()
-    
+
     while True:
         print("\n1. Make predictions")
         print("2. View predictions")
-        print("3. Exit")
-        print("Press the number key for your choice...")
-        
-        choice = readchar.readkey()
-        
+        print("3. Evaluate predictions")
+        print("4. Reset predictions")
+        print("5. Exit")
+
+        choice = input("Enter your choice (1-5): ")
+
         if choice == '1':
             predictor.get_user_predictions()
         elif choice == '2':
             predictor.display_predictions()
         elif choice == '3':
+            predictor.evaluate_predictions()
+        elif choice == '4':
+            predictor.reset_predictions()
+        elif choice == '5':
             print("\nThank you for using the Stock Prediction App!")
             break
         else:
