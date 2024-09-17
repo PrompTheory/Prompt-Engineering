@@ -256,13 +256,40 @@ class StockPrediction:
         print(f"\nAverage Brier Score: {average_brier_score:.4f}")
 
     def reset_predictions(self):
-        """Reset all saved predictions."""
-        self.predictions.clear()
-        # Remove all prediction files
-        for file in os.listdir():
-            if file.startswith('predictions_') and file.endswith('.json'):
-                os.remove(file)
-        print("All predictions have been reset.")
+        """Allow the user to delete specific prediction sets with confirmation."""
+        # List all prediction files
+        prediction_files = [file for file in os.listdir() if file.startswith('predictions_') and file.endswith('.json')]
+        if not prediction_files:
+            print("No prediction files found to delete.")
+            return
+
+        print("\nAvailable Prediction Files:")
+        for idx, file in enumerate(prediction_files, 1):
+            print(f"{idx}. {file}")
+
+        while True:
+            try:
+                choice = int(input("Enter the number of the prediction set you want to delete (or 0 to cancel): "))
+                if choice == 0:
+                    print("Deletion cancelled.")
+                    return
+                if 1 <= choice <= len(prediction_files):
+                    file_to_delete = prediction_files[choice - 1]
+                    break
+                else:
+                    print(f"Please enter a number between 1 and {len(prediction_files)}, or 0 to cancel.")
+            except ValueError:
+                print("Invalid input. Please enter a valid number.")
+
+        confirmation = input(f"Type 'DELETE' to confirm deletion of {file_to_delete}: ")
+        if confirmation == 'DELETE':
+            os.remove(file_to_delete)
+            print(f"{file_to_delete} has been deleted.")
+            # Reload predictions after deletion
+            self.load_all_predictions()
+        else:
+            print("Deletion not confirmed. No files were deleted.")
+
 
 def main():
     predictor = StockPrediction()
@@ -272,7 +299,7 @@ def main():
         print("2. View predictions")
         print("3. Evaluate predictions")
         print("4. Calculate Brier Score")
-        print("5. Reset predictions")
+        print("5. Delete a prediction set")
         print("6. Exit")
 
         choice = input("Enter your choice (1-6): ")
