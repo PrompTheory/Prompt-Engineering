@@ -1,9 +1,10 @@
-# Prompt-Engineering
-Innovative prompt engineering and theoretical techniques for next-level Large Language Model interaction
+# Prompt-ING
+Innovative prompting and theoretical techniques for next-level Large Language Model interaction
 
-# Tools to assist with Prompt Engineering
 
-Text Generations assisted through  Clever Prompt-Engineering, strong (human) synthesizing intelligence, and the following custom instructions:
+# Tools to assist with Prompting
+
+Text Generations assisted through  Clever Prompting, strong (human) synthesizing intelligence, and the following custom instructions:
 Derived and adapted from , "Good with Words: Writing and Editing Book by Patrick Barry" 
 
 ``` See grammar rules Consider Word Order: Ensure words are ordered for clear meaning, e.g., "I'd love to help, but my parents are in town."
