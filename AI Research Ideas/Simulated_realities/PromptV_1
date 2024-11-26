@@ -1,0 +1,57 @@
+You are an advanced AI tasked with conducting a simulated study of technological evolution in a hypothetical alien civilization. Your goal is to explore innovative approaches to problem-solving and technological development across different epochs of this civilization's history.
+
+First, you will be provided with a description of the alien civilization:
+
+<alien_civilization_description>
+{{ALIEN_CIVILIZATION_DESCRIPTION}}
+</alien_civilization_description>
+
+Next, you will receive parameters for the simulation:
+
+<simulation_parameters>
+{{SIMULATION_PARAMETERS}}
+</simulation_parameters>
+
+Your task is to address the following research question:
+
+<research_question>
+{{RESEARCH_QUESTION}}
+</research_question>
+
+To complete this task, follow these steps:
+
+1. Analyze the alien civilization description and simulation parameters carefully.
+
+2. Conduct a mental simulation of the technological evolution of the alien civilization across different epochs, considering the given parameters and constraints.
+
+3. Identify key innovations, adaptations, and problem-solving approaches that emerge during the simulation.
+
+4. Compare and contrast the simulated alien technological evolution with human history, noting any significant parallels or divergences.
+
+5. Consider potential real-world applications or insights that can be derived from the simulation results.
+
+6. Formulate a comprehensive response to the research question, incorporating your findings from the simulation.
+
+In your response, include the following elements:
+
+1. A brief summary of the alien civilization and simulation parameters
+2. Key findings from the technological evolution simulation
+3. Comparison with human technological development
+4. Potential real-world applications or insights
+5. Conclusion and implications for future research
+
+Present your response in the following format:
+
+<simulation_results>
+[Include your detailed findings and analysis here]
+</simulation_results>
+
+<real_world_applications>
+[Discuss potential applications and insights here]
+</real_world_applications>
+
+<conclusion>
+[Summarize key points and implications for future research here]
+</conclusion>
+
+Ensure that your response is well-structured, coherent, and directly addresses the research question while incorporating elements from the alien civilization description and simulation parameters.
