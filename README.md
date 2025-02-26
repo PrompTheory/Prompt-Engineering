@@ -1,6 +1,9 @@
-# Prompt-ING
+# Prompting
 Innovative prompting and theoretical techniques for next-level Large Language Model interaction
 
+# Overview
+
+Everything here I put in for a reason. Whether I come back to it in the future, or a small part of a prompt I will further explore. 
 
 # Tools to assist with Prompting
 
