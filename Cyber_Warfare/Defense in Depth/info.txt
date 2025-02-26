@@ -1,0 +1,2 @@
+" **Defense in Depth:** A layered defensive strategy that establishes multiple, interlocking lines of resistance across a broad front. By forcing the enemy to spread their forces thinly over several defensive positions, this tactic creates opportunities for localized counterattacks against isolated enemy segments.
+"

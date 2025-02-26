@@ -1,0 +1,2 @@
+" **Tank Descent:** An integrated maneuver where infantry temporarily ride atop armored vehicles during rapid advances. Upon reaching the assault phase, they dismount to provide immediate ground support while simultaneously shielding the vehicle from anti-tank countermeasures.
+"
