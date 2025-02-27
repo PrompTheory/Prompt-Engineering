@@ -1,5 +1,13 @@
 Some Text Generations with Clever Prompting, strong (human) synthesizing intelligence.
 
+# Quick Links
+
+https://chatgpt.com/g/g-Uhu4LAy3O-convert-words-phrases-into-ipa
+https://chatgpt.com/g/g-LoNwQswaO-contrarian
+https://chatgpt.com/g/g-hgnSQO1gd-opposite-language
+
+
+
 # Prompting
 Innovative prompting and theoretical techniques for next-level Large Language Model interaction
 
