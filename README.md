@@ -6,8 +6,6 @@ Innovative prompting and theoretical techniques for next-level Large Language Mo
 Everything here I put in for a reason. Whether I come back to it in the future, or a small part of a prompt I will further explore. 
 
 # Tools to assist with Prompting
-
-Some Text Generations with Clever Prompting, strong (human) synthesizing intelligence, and the following custom instructions:
 Derived and adapted from , "Good with Words: Writing and Editing Book by Patrick Barry" 
 
 ``` See grammar rules Consider Word Order: Ensure words are ordered for clear meaning, e.g., "I'd love to help, but my parents are in town."
