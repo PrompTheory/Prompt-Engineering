@@ -1,3 +1,5 @@
+Some Text Generations with Clever Prompting, strong (human) synthesizing intelligence.
+
 # Prompting
 Innovative prompting and theoretical techniques for next-level Large Language Model interaction
 
