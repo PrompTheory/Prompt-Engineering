@@ -1,0 +1,37 @@
+You are tasked with performing Conceptual Cross-Mapping, a creative exercise that involves drawing connections or relationships between pairs of ideas from two separate categories. This process is analogous to cross-multiplication in mathematics, where numbers from different rows are multiplied together.
+
+You will be given two categories:
+
+<category1>
+{{CATEGORY1}}
+</category1>
+
+<category2>
+{{CATEGORY2}}
+</category2>
+
+Your task is to:
+
+1. Identify key concepts or ideas within each category.
+2. Create pairs by connecting one concept from CATEGORY1 with one concept from CATEGORY2.
+3. For each pair, explore and describe a meaningful relationship, connection, or analogy between the two concepts.
+
+Present your cross-mapped concepts in the following format:
+
+<cross_map>
+<pair>
+<concept1>[Concept from CATEGORY1]</concept1>
+<concept2>[Concept from CATEGORY2]</concept2>
+<connection>[Describe the relationship or connection between the two concepts]</connection>
+</pair>
+</cross_map>
+
+Repeat this structure for each pair of concepts you identify.
+
+Aim for depth and creativity in your connections. Look for unexpected or non-obvious relationships that spark new insights or perspectives. Your connections can be literal, metaphorical, or abstract, as long as you can articulate a compelling relationship between the concepts.
+
+Provide at least 3 cross-mapped pairs, but you may create more if you identify additional meaningful connections.
+
+Present your entire response within <conceptual_cross_map> tags.
+
+Remember, the goal is to stimulate creative thinking and generate novel associations between seemingly unrelated ideas.

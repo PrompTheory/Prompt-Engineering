@@ -1,0 +1,3362 @@
+ATTRIBUTE,Model Output,Rating
+Hash of WebGL fingerprint,"<fingerprinting_method>
+The WebGL fingerprinting method involves creating a hash from multiple WebGL characteristics:
+
+1. Create a WebGL context and render a complex 3D scene with specific parameters
+2. Collect the following data points:
+   - WebGL vendor and renderer strings
+   - Supported extensions list
+   - Maximum texture size and viewport dimensions
+   - Vertex and fragment shader precision formats
+3. Generate vertex and fragment shaders with floating-point operations
+4. Render multiple triangles with different color patterns
+5. Read back the pixel data using readPixels()
+6. Create a SHA-256 hash of the combined data
+
+The specific implementation:
+```javascript
+function getWebGLFingerprint() {
+    const canvas = document.createElement('canvas');
+    const gl = canvas.getContext('webgl');
+    
+    const vendorRenderer = gl.getParameter(gl.VENDOR) + 
+                          gl.getParameter(gl.RENDERER);
+    const extensions = gl.getSupportedExtensions().sort().join();
+    
+    // Render specific test pattern
+    // [Complex rendering code here]
+    
+    const pixels = new Uint8Array(gl.drawingBufferWidth * 
+                                gl.drawingBufferHeight * 4);
+    gl.readPixels(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight, 
+                  gl.RGBA, gl.UNSIGNED_BYTE, pixels);
+    
+    return sha256(vendorRenderer + extensions + pixels.join(''));
+}
+```
+</fingerprinting_method>
+
+<strength_explanation>
+This method is particularly strong for several reasons:
+
+1. High Uniqueness:
+- WebGL implementations vary significantly across different GPU/driver combinations
+- The rendering output is affected by hardware-level differences
+- The combination of multiple WebGL parameters creates a highly distinctive signature
+
+2. Hardware-Level Information:
+- Provides indirect access to GPU characteristics
+- Reflects both hardware and driver-level configurations
+- Difficult to virtualize or emulate consistently
+
+3. Stability:
+- Remains consistent across browser sessions
+- Hardware-based attributes are unlikely to change frequently
+- Resistant to common browser privacy settings
+
+4. Complexity:
+- Multiple data points make it difficult to spoof completely
+- Requires significant computational resources to emulate
+- Hardware-specific rendering behaviors are hard to replicate
+</strength_explanation>
+
+<limitations_and_countermeasures>
+Limitations:
+1. Performance impact when generating complex renders
+2. May vary if GPU drivers are updated
+3. Can be affected by hardware acceleration settings
+
+Countermeasures:
+1. Browser-level WebGL fingerprinting protection:
+   - Firefox's privacy.resistFingerprinting
+   - Brave's WebGL fingerprinting protection
+
+2. User-level countermeasures:
+   - Disabling WebGL
+   - Using GPU spoofing extensions
+   - Virtual machines with standardized GPU configurations
+
+3. Technical limitations:
+   - WebGL might be unavailable in some environments
+   - Some browsers are implementing standardized WebGL responses
+   - Hardware acceleration may be disabled by default in privacy-focused browsers
+
+The effectiveness of this method may decrease as browsers implement stronger privacy protections and standardized WebGL responses become more common.
+</limitations_and_countermeasures>",
+"User Agent
+","<fingerprinting_method>
+The method involves parsing and analyzing multiple components of the User Agent string while combining it with additional HTTP headers for enhanced identification:
+
+1. Parse the User Agent string into distinct components:
+- Operating system and version
+- Browser type and version
+- Device type and model
+- Engine version
+- Additional parameters (e.g., mobile indicators, architecture)
+
+2. Create a normalized signature by:
+- Extracting ordered key components
+- Applying consistent formatting rules
+- Generating a hash of the normalized string
+
+3. Implement pattern matching to:
+- Detect inconsistencies that might indicate spoofing
+- Compare against known User Agent patterns
+- Identify unique or rare combinations
+
+4. Cross-reference with supplementary headers:
+- Accept-Language
+- Accept-Encoding
+- Platform
+- SEC-CH-UA headers (for modern browsers)
+</fingerprinting_method>
+
+<strength_explanation>
+This method is particularly strong for several reasons:
+
+1. High Information Density:
+- User Agent strings contain rich device and browser information
+- The combination of components creates highly distinctive patterns
+- Cross-referencing with other headers increases uniqueness
+
+2. Reliability:
+- User Agent strings are consistently transmitted with HTTP requests
+- Browser-specific patterns are well-documented and predictable
+- Inconsistencies are easily detectable
+
+3. Difficulty to Spoof Effectively:
+- Complete and consistent spoofing requires modifying multiple related headers
+- Internal inconsistencies often reveal spoofing attempts
+- Modern browsers implement Client Hints which can validate User Agent data
+
+4. Historical Tracking:
+- Changes in User Agent strings can indicate device or browser updates
+- Patterns of change can be tracked across sessions
+- Helps establish user behavior patterns
+</strength_explanation>
+
+<limitations_and_countermeasures>
+Limitations:
+
+1. Increasing Privacy Measures:
+- Browsers are moving towards reduced User Agent strings
+- Client Hints are replacing traditional User Agent information
+- Privacy-focused browsers may send generic User Agent strings
+
+2. Easy Basic Spoofing:
+- Simple User Agent switching is widely available
+- Many privacy tools automatically modify User Agent strings
+- VPNs and proxies often include User Agent modification
+
+Countermeasures:
+
+1. Browser-based:
+- User Agent string reduction (as implemented in Chrome)
+- Default privacy modes that limit User Agent information
+- Extensions that randomize User Agent strings
+
+2. User-based:
+- User Agent spoofing extensions
+- Privacy-focused browsers (like Tor)
+- Container-based browsing sessions
+
+3. Platform-level:
+- Operating system level privacy controls
+- Network-level User Agent modification
+- Virtual machine environments
+</limitations_and_countermeasures>",
+Browser Plugin Details,"<fingerprinting_method>
+The method involves creating a comprehensive plugin fingerprint by:
+1. Enumerating all installed plugins using navigator.plugins
+2. For each plugin, collecting:
+   - Exact name and version
+   - Supported MIME types and their configurations
+   - Plugin filename and description
+   - Plugin-specific properties and capabilities
+3. Creating a hash of the collected data using:
+```javascript
+function getPluginFingerprint() {
+    const plugins = Array.from(navigator.plugins);
+    const pluginDetails = plugins.map(plugin => ({
+        name: plugin.name,
+        version: plugin.version,
+        filename: plugin.filename,
+        description: plugin.description,
+        mimeTypes: Array.from(plugin.mimeTypes).map(mime => ({
+            type: mime.type,
+            description: mime.description,
+            suffixes: mime.suffixes
+        }))
+    }));
+    return JSON.stringify(pluginDetails);
+}
+```
+4. Combining this with additional checks for plugin behavior and capabilities testing
+</fingerprinting_method>
+
+<strength_explanation>
+This method is particularly strong because:
+1. High Uniqueness: Plugin configurations vary significantly between users, especially considering:
+   - Different versions of the same plugin
+   - Combinations of multiple plugins
+   - Specific settings and capabilities
+   
+2. Persistence: Plugin configurations tend to remain stable unless explicitly modified by users
+
+3. Detailed Information: The method captures not just presence/absence but detailed characteristics of each plugin
+
+4. Cross-validation: Plugin behavior testing helps verify the authenticity of reported information
+
+5. Difficulty to Spoof: Completely simulating plugin behavior is complex, making it harder to forge fingerprints
+</strength_explanation>
+
+<limitations_and_countermeasures>
+Limitations and potential countermeasures include:
+
+1. Modern Browser Restrictions:
+- Many browsers are phasing out NPAPI plugin support
+- Chrome and Firefox have restricted plugin APIs
+- Some browsers now standardize plugin reporting
+
+2. Privacy-Focused Countermeasures:
+- Browser extensions that randomize plugin information
+- Privacy-focused browsers that block plugin enumeration
+- Container-based isolation that presents consistent plugin profiles
+
+3. Technical Limitations:
+- Reduced effectiveness on mobile devices (limited plugin support)
+- Increasing use of web standards reducing plugin dependency
+- Growing adoption of privacy-preserving APIs that limit plugin access
+
+4. User Countermeasures:
+- Using plugin-free browsers
+- Regular plugin cleanup and standardization
+- Privacy-focused operating system configurations
+</limitations_and_countermeasures>",
+Time Zone Offset,"<fingerprinting_method>
+The Time Zone Offset fingerprinting method combines multiple time-related data points:
+
+1. Primary offset detection:
+```javascript
+const primaryOffset = new Date().getTimezoneOffset();
+```
+
+2. Detailed timezone information:
+```javascript
+const timeZoneInfo = {
+    offset: primaryOffset,
+    dstObservance: detectDSTTransitions(),
+    timeZoneName: Intl.DateTimeFormat().resolvedOptions().timeZone,
+    offsetConsistency: validateOffsetConsistency()
+};
+
+function detectDSTTransitions() {
+    const january = new Date(2024, 0, 1).getTimezoneOffset();
+    const july = new Date(2024, 6, 1).getTimezoneOffset();
+    return january !== july;
+}
+
+function validateOffsetConsistency() {
+    const measurements = [];
+    for(let i = 0; i < 24; i++) {
+        measurements.push(new Date(2024, 0, 1, i).getTimezoneOffset());
+    }
+    return measurements;
+}
+```
+
+3. System time precision check:
+```javascript
+const precisionData = performance.now() - Date.now();
+```
+</fingerprinting_method>
+
+<strength_explanation>
+This method is considered strong for several reasons:
+
+1. Multi-layered Data Collection:
+- Captures not just basic offset but DST behavior and system time characteristics
+- Provides granular timezone identification through the Intl API
+- Includes consistency checks that can reveal attempts at spoofing
+
+2. High Entropy Value:
+- Combines multiple time-related parameters creating a more unique identifier
+- DST transition patterns vary significantly across regions
+- System time precision adds additional uniqueness
+
+3. Reliability:
+- Time zone data is consistently available across browsers
+- Changes in time zone settings usually indicate genuine user movement
+- Difficult to completely mask or spoof without breaking browser functionality
+
+4. Persistence:
+- Time zone settings typically remain stable for extended periods
+- Changes can be tracked to establish movement patterns
+- Helps identify returning users even with cleared cookies
+</strength_explanation>
+
+<limitations_and_countermeasures>
+Limitations:
+
+1. Geographic Clustering:
+- Users in the same time zone will share similar values
+- Less effective in densely populated time zones
+- May require combination with other fingerprinting methods
+
+2. Privacy-Focused Countermeasures:
+- Modern browsers may round or fuzzy time-related values
+- Privacy-focused browsers might return standardized timezone data
+- VPNs and location spoofing can affect timezone reporting
+
+3. Technical Constraints:
+- Some browsers limit access to precise timing information
+- Privacy-focused OS settings may restrict timezone access
+- Containerized browsing environments may provide inconsistent data
+
+Common Countermeasures:
+- Browser extensions that randomize timezone data
+- VPNs that automatically adjust system time to match exit node location
+- Privacy-focused browsers that standardize timezone reporting
+- System-level timezone spoofing tools
+- Container-based browsing solutions that isolate timezone settings
+</limitations_and_countermeasures>",
+"WebGL Vendor & Renderer
+","<fingerprinting_method>
+The WebGL Vendor & Renderer fingerprinting method involves:
+1. Creating a WebGL context using canvas.getContext('webgl')
+2. Querying both UNMASKED_VENDOR_WEBGL and UNMASKED_RENDERER_WEBGL parameters using getParameter()
+3. Combining this with additional WebGL capabilities and supported extensions
+4. Creating a hash of the following data points:
+   - Vendor string (e.g., ""Intel Inc."")
+   - Renderer string (e.g., ""Intel Iris OpenGL Engine"")
+   - List of supported WebGL extensions
+   - Maximum supported texture size
+   - Maximum viewport dimensions
+   - WebGL version information
+
+Example implementation:
+```javascript
+function getWebGLFingerprint() {
+    const canvas = document.createElement('canvas');
+    const gl = canvas.getContext('webgl');
+    const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
+    
+    const vendor = gl.getParameter(debugInfo.UNMASKED_VENDOR_WEBGL);
+    const renderer = gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL);
+    const extensions = gl.getSupportedExtensions().sort();
+    
+    return hash(JSON.stringify({
+        vendor,
+        renderer,
+        extensions,
+        maxTextureSize: gl.getParameter(gl.MAX_TEXTURE_SIZE),
+        maxViewportDims: gl.getParameter(gl.MAX_VIEWPORT_DIMS),
+        webglVersion: gl.getParameter(gl.VERSION)
+    }));
+}
+```
+</fingerprinting_method>
+
+<strength_explanation>
+This method is particularly strong because:
+1. High Uniqueness: GPU information provides highly distinctive data points, especially when combined with supported extensions and capabilities
+2. Hardware-Based: The information reflects actual hardware configuration, making it difficult to spoof consistently
+3. Stability: GPU information typically remains constant across browser sessions
+4. Cross-Browser Consistency: While implementation details may vary, the underlying hardware information remains consistent
+5. Granular Information: Provides detailed technical specifications that can help identify specific device models
+6. Resistance to Virtualization: WebGL parameters often reveal true hardware details even in virtualized environments
+</strength_explanation>
+
+<limitations_and_countermeasures>
+Limitations:
+1. Some browsers (like Tor) may restrict or standardize WebGL information
+2. Privacy-focused browsers might block access to WEBGL_debug_renderer_info
+3. Hardware updates or driver changes can alter the fingerprint
+
+Countermeasures:
+1. Browser-level WebGL spoofing or randomization
+2. Disabling WebGL completely
+3. Using privacy-focused browsers that standardize WebGL responses
+4. GPU virtualization technologies that mask real hardware details
+5. Extensions that inject random noise into WebGL parameters
+
+Modern browsers are increasingly implementing privacy features that may limit access to detailed WebGL information, requiring fingerprinting techniques to adapt and combine multiple attributes for reliable identification.
+</limitations_and_countermeasures>",
+Time Zone,"<fingerprinting_method>
+The Time Zone fingerprinting method combines multiple time-related data points:
+
+1. Retrieve the raw timezone offset using:
+```javascript
+const timezoneOffset = new Date().getTimezoneOffset();
+const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+```
+
+2. Monitor daylight savings time (DST) transitions:
+```javascript
+function getDSTTransitions() {
+    const year = new Date().getFullYear();
+    const transitions = [];
+    
+    for(let month = 0; month < 12; month++) {
+        const d = new Date(year, month, 1);
+        const offset = d.getTimezoneOffset();
+        if(transitions.length === 0 || 
+           transitions[transitions.length-1].offset !== offset) {
+            transitions.push({
+                month: month,
+                offset: offset
+            });
+        }
+    }
+    return transitions;
+}
+```
+
+3. Collect system time formatting preferences:
+```javascript
+const timeFormatting = new Intl.DateTimeFormat(undefined, {
+    hour: 'numeric',
+    minute: 'numeric',
+    second: 'numeric'
+}).resolvedOptions();
+```
+
+This data is combined into a composite fingerprint value that includes the timezone name, offset, DST transition dates, and formatting preferences.
+</fingerprinting_method>
+
+<strength_explanation>
+This method is particularly strong for several reasons:
+
+1. High Entropy: The combination of timezone offset, name, and DST transitions creates a more unique identifier than using just one time-related attribute.
+
+2. Geographic Correlation: Timezone data provides approximate geographic location without requiring explicit geolocation permissions.
+
+3. Behavioral Insights: DST transition patterns can reveal user location and travel patterns over time.
+
+4. Difficult to Spoof Consistently: While individual components might be spoofable, maintaining consistency across all time-related attributes requires significant effort.
+
+5. Persistence: Timezone settings tend to remain stable unless a user physically travels or deliberately changes them.
+
+6. Cross-Browser Consistency: Time-related information tends to be consistent across different browsers on the same device.
+</strength_explanation>
+
+<limitations_and_countermeasures>
+Limitations:
+
+1. VPN/Proxy Usage: Users can change their apparent timezone by using VPNs or proxy servers.
+
+2. Privacy-Focused Browsers: Some browsers like Tor standardize timezone information across all users.
+
+3. Virtual Machines: Users can easily modify timezone settings in virtual environments.
+
+Countermeasures:
+
+1. Browser-Level:
+- Firefox's privacy.resistFingerprinting setting can standardize timezone reporting
+- Brave Browser's fingerprinting protection can randomize or standardize timezone data
+
+2. User-Level:
+- Using timezone spoofing extensions
+- Running browsers in containerized environments with controlled timezone settings
+- Using privacy-focused operating systems that randomize or standardize system time information
+
+3. Technical Evolution:
+- Modern browsers are increasingly implementing privacy-preserving APIs that may limit access to detailed timezone information
+- Future Web standards may require explicit user permission for accessing timezone data
+</limitations_and_countermeasures>",
+Are Cookies Enabled?,"<fingerprinting_method>
+The cookie detection method involves a multi-layered approach:
+
+1. Initial cookie write attempt using JavaScript:
+```javascript
+document.cookie = ""fpTest=true; SameSite=Strict; Secure"";
+```
+
+2. Secondary verification through DOM storage:
+```javascript
+localStorage.setItem(""fpTestLS"", ""true"");
+sessionStorage.setItem(""fpTestSS"", ""true"");
+```
+
+3. Cross-verification using multiple domains:
+- Set cookies across multiple subdomains
+- Attempt third-party cookie operations
+- Monitor cookie persistence and deletion patterns
+
+4. Cookie behavior analysis:
+- Check cookie size limitations
+- Verify SameSite attribute handling
+- Test secure flag implementations
+- Analyze cookie expiration handling
+</fingerprinting_method>
+
+<strength_explanation>
+This method is considered strong for several reasons:
+
+1. Comprehensive Detection:
+- Provides multiple data points about cookie behavior
+- Reveals browser privacy settings and configurations
+- Identifies custom cookie policies
+
+2. High Reliability:
+- Cookie behavior patterns are relatively stable
+- Changes often indicate deliberate user actions
+- Cross-domain verification increases accuracy
+
+3. Enhanced Signal:
+- Combines multiple cookie-related attributes
+- Creates a more unique identifier when combined with other fingerprinting methods
+- Difficult to consistently spoof across all layers
+
+4. Privacy Setting Insights:
+- Reveals user's privacy preferences
+- Indicates presence of privacy-enhancing extensions
+- Shows browser security configurations
+</strength_explanation>
+
+<limitations_and_countermeasures>
+Limitations:
+
+1. Modern Browser Restrictions:
+- Increasing cookie restrictions in modern browsers
+- Third-party cookie phase-out
+- Enhanced privacy modes affecting cookie behavior
+
+2. User Countermeasures:
+- Cookie blockers and cleaners
+- Privacy-focused browser extensions
+- Regular cookie clearing
+
+3. Technical Limitations:
+- Cannot detect all privacy tools
+- Some behaviors may be inconsistent
+- Limited effectiveness in private browsing modes
+
+Countermeasures:
+- Browser privacy settings to block cookies
+- Container-based browsing
+- Regular cookie clearing
+- Use of privacy-focused browsers
+- Cookie consent management tools
+</limitations_and_countermeasures>",
+DNT Header,"<fingerprinting_method>
+The DNT (Do Not Track) Header fingerprinting method involves:
+1. Detecting the presence/absence of the DNT header
+2. Reading its specific value (0, 1, or null)
+3. Combining this with the detection method used to access the DNT setting:
+   - navigator.doNotTrack
+   - navigator.msDoNotTrack (legacy IE)
+   - window.doNotTrack
+
+Example implementation:
+```javascript
+function getDNTFingerprint() {
+    const dntValues = {
+        headerValue: request.headers['DNT'],
+        navigatorValue: navigator.doNotTrack,
+        windowValue: window.doNotTrack
+    };
+    
+    const dntConsistency = checkDNTConsistency(dntValues);
+    return {
+        values: dntValues,
+        consistency: dntConsistency,
+        timestamp: Date.now()
+    };
+}
+```
+</fingerprinting_method>
+
+<strength_explanation>
+This method is considered strong for several reasons:
+1. Behavioral Insight: The DNT setting often reflects a user's privacy consciousness, creating a correlation with other privacy-related behaviors.
+
+2. Cross-Reference Potential: Inconsistencies between different DNT access methods can reveal:
+   - Modified browser configurations
+   - Privacy tools or extensions
+   - Custom user settings
+
+3. Persistence: Users rarely change their DNT settings, making it a relatively stable identifier component.
+
+4. Implementation Variations: Different browsers and versions handle DNT differently, adding to the fingerprint's uniqueness.
+</strength_explanation>
+
+<limitations_and_countermeasures>
+Limitations:
+1. Limited Entropy: Only three possible values (0, 1, null) provide minimal unique identification alone.
+2. Increasing Privacy Focus: Modern browsers are phasing out or limiting DNT header exposure.
+3. Growing Awareness: Privacy-conscious users are more likely to use tools that mask or standardize DNT values.
+
+Countermeasures:
+1. Privacy-focused browsers may:
+   - Standardize DNT values across all users
+   - Remove DNT header support entirely
+   - Randomize DNT values per session
+
+2. Users can:
+   - Use privacy extensions that manage DNT headers
+   - Employ browsers with enhanced privacy features
+   - Use containerization to isolate browsing contexts
+</limitations_and_countermeasures>",
+Language,"<fingerprinting_method>
+The advanced language fingerprinting method combines multiple language-related attributes:
+
+1. navigator.languages array collection
+2. navigator.language value
+3. Accept-Language HTTP header
+4. System locale information
+5. Browser UI language
+6. Keyboard layout detection
+7. Spellchecker language preferences
+
+The method creates a composite fingerprint by:
+- Analyzing discrepancies between these different language indicators
+- Recording the exact ordering of preferred languages
+- Detecting language-specific formatting preferences (date, number formats)
+- Monitoring real-time language switching behavior
+- Cross-referencing with time zone and regional settings
+
+Implementation example:
+```javascript
+function createLanguageFingerprint() {
+    const languageData = {
+        navigatorLanguages: navigator.languages,
+        primaryLanguage: navigator.language,
+        acceptLanguage: request.headers['accept-language'],
+        timeFormat: new Date().toLocaleString(),
+        numberFormat: (123456.78).toLocaleString(),
+        keyboardLayout: detectKeyboardLayout(),
+        spellcheckerLanguages: getSpellcheckerLanguages()
+    };
+    return hash(JSON.stringify(languageData));
+}
+```
+</fingerprinting_method>
+
+<strength_explanation>
+This method is particularly strong because:
+
+1. High Uniqueness:
+- The combination of multiple language indicators creates a more distinctive profile
+- Language preferences often reflect user's geographic and cultural background
+- The ordering of preferred languages is highly personal
+
+2. Difficulty to Spoof:
+- Maintaining consistency across all language-related attributes is challenging
+- Browser automation tools often fail to properly emulate all language aspects
+- Real-time language behavior is hard to fake convincingly
+
+3. Persistence:
+- Language preferences tend to remain stable over time
+- Users rarely change their core language settings
+- The composite nature provides redundancy if single elements change
+
+4. Technical Robustness:
+- Works across different browsers and devices
+- Resistant to common privacy tools that only mask individual attributes
+- Can detect inconsistencies that indicate spoofing attempts
+</strength_explanation>
+
+<limitations_and_countermeasures>
+Limitations:
+
+1. Reduced effectiveness in:
+- Regions with homogeneous language usage
+- Corporate environments with standardized settings
+- Devices shared by multiple users
+
+2. Technical constraints:
+- Some browsers limit access to language-related APIs
+- Private browsing modes may restrict language information
+- Mobile browsers might provide less detailed language data
+
+Countermeasures:
+
+1. Browser-level:
+- Language spoofing extensions
+- Privacy-focused browsers that standardize language settings
+- Containers that isolate language preferences
+
+2. User-level:
+- Using system-wide language randomization
+- Regular clearing of language preferences
+- VPN services that adjust language settings based on location
+
+3. Emerging technologies:
+- Browser fingerprinting protection in modern browsers
+- AI-based privacy tools that maintain consistent language profiles
+- Advanced containerization techniques
+</limitations_and_countermeasures>",
+"AudioContext fingerprint
+","<fingerprinting_method>
+The AudioContext fingerprinting method creates a unique audio signature by:
+1. Creating an offline AudioContext and OscillatorNode
+2. Generating a specific audio signal (e.g., sine wave at 10kHz)
+3. Processing it through various audio nodes (Compressor, DynamicsCompressor)
+4. Capturing the processed audio buffer
+5. Computing a hash of the frequency domain data using:
+
+```javascript
+const audioContext = new (window.OfflineAudioContext || window.webkitOfflineAudioContext)(1, 44100, 44100);
+const oscillator = audioContext.createOscillator();
+const dynamicsCompressor = audioContext.createDynamicsCompressor();
+
+oscillator.type = 'triangle';
+oscillator.frequency.setValueAtTime(10000, audioContext.currentTime);
+
+oscillator.connect(dynamicsCompressor);
+dynamicsCompressor.connect(audioContext.destination);
+
+oscillator.start(0);
+audioContext.startRendering().then((audioBuffer) => {
+    const audioData = audioBuffer.getChannelData(0);
+    const dataToHash = audioData.slice(4500, 5000);
+    // Generate hash of audio data
+});
+```
+
+The method also captures audio processing attributes like:
+- Sample rate
+- Channel count
+- Buffer size
+- Compression characteristics
+</fingerprinting_method>
+
+<strength_explanation>
+This method is particularly strong because:
+
+1. Hardware/Software Uniqueness:
+- Different audio hardware and drivers process signals uniquely
+- CPU processing characteristics affect audio processing
+- Operating system audio stack variations create distinct signatures
+
+2. Stability:
+- Audio processing characteristics remain consistent across sessions
+- Hardware-level features are difficult to modify or spoof
+- Processing patterns are resistant to common browser privacy settings
+
+3. Complexity:
+- Multiple audio parameters create a high-entropy fingerprint
+- The combination of time and frequency domain features increases uniqueness
+- Processing characteristics are influenced by multiple system layers
+</strength_explanation>
+
+<limitations_and_countermeasures>
+Limitations:
+1. Requires JavaScript and AudioContext API access
+2. Some browsers may restrict AudioContext in private/incognito modes
+3. Performance impact of audio processing
+4. May vary with system load or background processes
+
+Countermeasures:
+1. Browser-level:
+- Standardizing audio processing behavior
+- Adding noise to audio processing
+- Restricting AudioContext API access
+
+2. User-level:
+- Disabling JavaScript audio processing
+- Using audio processing blockers
+- Employing privacy-focused browsers that normalize audio behavior
+
+3. System-level:
+- Virtualizing audio hardware
+- Using audio processing containers
+- Implementing system-wide audio privacy controls
+</limitations_and_countermeasures>",
+Web Bluetooth API Support and Device Information,"<fingerprinting_method>
+The Web Bluetooth API fingerprinting method involves:
+1. Detecting API support and version
+2. Enumerating available Bluetooth services and characteristics
+3. Gathering device-specific information through permitted Bluetooth scans
+4. Creating a composite hash of:
+   - Available Bluetooth services
+   - API feature support matrix
+   - Device discovery patterns
+   - Hardware-specific Bluetooth capabilities
+
+Example implementation:
+```javascript
+async function generateBluetoothFingerprint() {
+    const fingerprint = {
+        apiSupport: 'bluetooth' in navigator,
+        features: {},
+        availableServices: []
+    };
+
+    if (fingerprint.apiSupport) {
+        // Test for specific feature support
+        fingerprint.features = {
+            availabilityChanged: 'onavailabilitychanged' in navigator.bluetooth,
+            referringDevice: 'referringDevice' in navigator.bluetooth,
+            getAvailability: 'getAvailability' in navigator.bluetooth
+        };
+
+        // Attempt to discover devices with common services
+        try {
+            const availability = await navigator.bluetooth.getAvailability();
+            fingerprint.availability = availability;
+            
+            if (availability) {
+                const device = await navigator.bluetooth.requestDevice({
+                    acceptAllDevices: true,
+                    optionalServices: [
+                        'battery_service',
+                        'device_information',
+                        'generic_access'
+                    ]
+                });
+                fingerprint.availableServices = device.gatt.getPrimaryServices();
+            }
+        } catch (error) {
+            fingerprint.error = error.name;
+        }
+    }
+
+    return hashFingerprint(fingerprint);
+}
+```
+</fingerprinting_method>
+
+<strength_explanation>
+This method is considered strong for several reasons:
+
+1. High Uniqueness:
+- Bluetooth API support varies significantly across browsers and devices
+- The combination of available services and characteristics creates a highly distinctive profile
+- Hardware-specific Bluetooth capabilities add additional entropy
+
+2. Hardware Connection:
+- Direct correlation with physical hardware makes spoofing more difficult
+- Provides information about the actual device capabilities
+- Changes in physical device location can be detected through Bluetooth scanning
+
+3. Persistence:
+- Hardware-based attributes remain consistent across browser sessions
+- Bluetooth capabilities typically remain stable unless hardware is changed
+- API support patterns tend to be consistent for specific browser versions
+
+4. Difficulty to Modify:
+- Users cannot easily modify or fake Bluetooth hardware capabilities
+- API responses are tied to actual hardware implementation
+- System-level integration makes spoofing complex
+</strength_explanation>
+
+<limitations_and_countermeasures>
+Limitations:
+1. Requires user permission for Bluetooth access
+2. Not available in all browsers or devices
+3. May be blocked by security policies
+4. Requires active Bluetooth hardware
+
+Countermeasures:
+1. Users can:
+- Disable Bluetooth functionality
+- Use browsers that don't support Web Bluetooth API
+- Implement permission controls
+- Use privacy-focused browsers that standardize API responses
+
+2. Browsers can:
+- Standardize API responses across devices
+- Implement permission prompts for Bluetooth access
+- Provide sanitized or virtualized Bluetooth information
+- Block or limit Web Bluetooth API in private browsing modes
+
+3. Security software can:
+- Block Web Bluetooth API access
+- Provide virtualized Bluetooth environments
+- Randomize device information
+- Monitor and control Bluetooth permissions
+</limitations_and_countermeasures>",
+"Touch Support
+","<fingerprinting_method>
+The Touch Support fingerprinting method involves creating a comprehensive touch capability profile by:
+
+1. Detecting maxTouchPoints using navigator.maxTouchPoints
+2. Querying TouchEvent support using 'ontouchstart' in window
+3. Testing for specific touch-related APIs:
+   - Touch Events API
+   - Pointer Events API
+   - Mobile-specific touch features
+4. Analyzing touch behavior characteristics:
+   ```javascript
+   const touchProfile = {
+     maxTouchPoints: navigator.maxTouchPoints,
+     touchEvent: typeof TouchEvent !== 'undefined',
+     touchStart: 'ontouchstart' in window,
+     pointerEnabled: navigator.pointerEnabled,
+     msMaxTouchPoints: navigator.msMaxTouchPoints,
+     touchBehavior: {
+       pressure: false,
+       size: false,
+       rotation: false
+     }
+   };
+   ```
+5. Combining these data points with screen dimensions and orientation capabilities
+</fingerprinting_method>
+
+<strength_explanation>
+This method is particularly strong because:
+
+1. High Distinctiveness:
+- Touch capabilities vary significantly across devices and platforms
+- The combination of touch features creates a detailed profile
+- Different hardware implementations provide unique characteristics
+
+2. Reliability:
+- Touch support information is consistently available
+- Hardware-based attributes are difficult to spoof
+- Values remain stable across sessions
+
+3. Cross-validation:
+- Multiple touch-related properties can verify each other
+- Inconsistencies can identify spoofing attempts
+- Correlation with other device characteristics provides additional validation
+
+4. Modern Relevance:
+- Increasing prevalence of touch-enabled devices
+- Growing diversity in touch implementation methods
+- Emergence of hybrid devices with multiple input methods
+</strength_explanation>
+
+<limitations_and_countermeasures>
+Limitations:
+
+1. Device Consistency:
+- Similar device models may share identical touch profiles
+- Limited variation within specific device categories
+- Some touch features are standardized across manufacturers
+
+2. Platform Restrictions:
+- iOS limits access to detailed touch information
+- Some browsers may restrict touch API access
+- Privacy-focused browsers may normalize touch data
+
+Countermeasures:
+
+1. User-side:
+- Using touch-capability spoofing extensions
+- Disabling touch features through browser settings
+- Using privacy-focused browsers that standardize touch reporting
+
+2. Browser-side:
+- Implementing touch API restrictions
+- Normalizing touch capability reporting
+- Limiting access to detailed touch information in private browsing modes
+
+3. Platform-level:
+- OS-level restrictions on touch API access
+- Standardization of touch feature reporting
+- Implementation of privacy-preserving touch APIs
+</limitations_and_countermeasures>",
+CPU Class /CPU ID ,"<fingerprinting_method>
+The CPU Class/ID fingerprinting method involves a multi-layered approach:
+
+1. Direct CPU feature detection using JavaScript:
+```javascript
+function detectCPUFeatures() {
+    const features = [];
+    try {
+        // Test for SIMD capabilities
+        if (typeof WebAssembly === 'object') {
+            features.push('WebAssembly');
+            // Test specific SIMD instructions
+            const simdTest = WebAssembly.validate(new Uint8Array([
+                0x00, 0x61, 0x73, 0x6d, 0x01, 0x00, 0x00, 0x00
+            ]));
+            if (simdTest) features.push('SIMD');
+        }
+        
+        // Performance measurements
+        const t0 = performance.now();
+        // Run CPU-intensive calculation
+        for(let i = 0; i < 1000000; i++) {
+            Math.sqrt(i);
+        }
+        const t1 = performance.now();
+        features.push(`perf:${Math.round(t1 - t0)}`);
+    } catch(e) {
+        features.push('error:' + e.message);
+    }
+    return features.join('|');
+}
+```
+
+2. Hardware concurrency detection:
+```javascript
+const cores = navigator.hardwareConcurrency || 'unknown';
+```
+
+3. Performance timing analysis of specific CPU operations to create a timing fingerprint.
+</fingerprinting_method>
+
+<strength_explanation>
+This method is considered strong for several reasons:
+
+1. High Uniqueness:
+- CPU characteristics provide significant entropy in fingerprinting
+- The combination of feature detection and performance metrics creates a complex identifier
+- Hardware concurrency values vary significantly across devices
+
+2. Persistence:
+- CPU characteristics rarely change unless hardware is upgraded
+- Performance patterns remain relatively consistent across sessions
+
+3. Difficulty to Spoof:
+- CPU performance characteristics are challenging to fake convincingly
+- Timing-based measurements are hardware-dependent and difficult to emulate
+- WebAssembly feature detection provides reliable hardware information
+
+4. Cross-validation:
+- Multiple data points allow for verification of consistency
+- Performance metrics can detect virtualization or spoofing attempts
+</strength_explanation>
+
+<limitations_and_countermeasures>
+Limitations:
+
+1. Browser Restrictions:
+- Modern browsers increasingly limit access to detailed CPU information
+- Some browsers standardize hardwareConcurrency values
+
+2. Performance Variability:
+- System load can affect timing measurements
+- Background processes may introduce noise in performance metrics
+
+Countermeasures:
+
+1. Browser-level:
+- Firefox's privacy.resistFingerprinting setting
+- Brave's fingerprinting protection
+- Chrome's Privacy Sandbox initiatives
+
+2. User-level:
+- CPU virtualization
+- Browser containers
+- Privacy-focused extensions that normalize hardware reporting
+
+3. Platform-level:
+- OS-level CPU frequency scaling
+- Hardware virtualization technologies
+- Container-based browsing solutions
+
+The effectiveness of this method may decrease as browsers implement stronger privacy protections and hardware abstraction layers become more sophisticated.
+</limitations_and_countermeasures>",
+Hardware Concurrency,"<fingerprinting_method>
+The Hardware Concurrency fingerprinting method utilizes the navigator.hardwareConcurrency API to determine the number of logical processor cores available to the browser. The method combines this information with additional CPU-related characteristics:
+
+```javascript
+function getHardwareFingerprint() {
+    const cores = navigator.hardwareConcurrency || 'unknown';
+    
+    // Measure CPU performance characteristics
+    const performanceStart = performance.now();
+    let computeIntensive = 0;
+    for(let i = 0; i < 1000000; i++) {
+        computeIntensive += Math.sqrt(i);
+    }
+    const performanceEnd = performance.now();
+    
+    return {
+        cores: cores,
+        performanceScore: performanceEnd - performanceStart,
+        timeResolution: performance.now() - Math.floor(performance.now())
+    };
+}
+```
+
+This method creates a composite fingerprint by combining the core count with performance characteristics that are influenced by the underlying hardware configuration.
+</fingerprinting_method>
+
+<strength_explanation>
+This method is considered strong for several reasons:
+
+1. Hardware-level information: The core count provides direct insight into the user's physical hardware, which is more difficult to modify than software-based attributes.
+
+2. Stability: Hardware characteristics remain consistent across browser sessions and typically only change when the device is upgraded or replaced.
+
+3. Correlation potential: The combination of core count and performance metrics creates a more unique identifier, as devices with the same core count may exhibit different performance characteristics.
+
+4. Cross-browser consistency: Hardware concurrency values tend to be consistent across different browsers on the same device, making it valuable for cross-browser tracking.
+
+5. Limited variability: Users rarely modify their CPU configuration, making this attribute relatively stable over time.
+</strength_explanation>
+
+<limitations_and_countermeasures>
+Limitations and potential countermeasures include:
+
+1. Privacy-focused browsers may:
+- Return rounded or standardized core counts
+- Implement random noise in performance measurements
+- Block access to the hardwareConcurrency API entirely
+
+2. Virtual machines and containers can mask true hardware characteristics
+
+3. Modern hardware with dynamic core allocation (like mobile devices with big.LITTLE architecture) may show varying results
+
+4. Users can modify this value using browser extensions or custom JavaScript injection
+
+5. The increasing prevalence of cloud gaming and remote desktop services may reduce the reliability of hardware-based fingerprinting
+
+To mitigate these limitations, fingerprinting systems should:
+- Use this method as part of a larger fingerprinting ensemble
+- Implement fallback mechanisms when hardware information is unavailable
+- Regular calibration of performance benchmarks to account for system variations
+</limitations_and_countermeasures>",
+Platform,"<fingerprinting_method>
+The platform fingerprinting method combines multiple platform-related data points:
+
+1. Primary platform detection using navigator.platform
+2. Cross-validation with navigator.userAgent and navigator.appVersion
+3. OS-specific feature detection (e.g., MacOS gestures, Windows touch events)
+4. Platform-specific font detection
+5. Performance benchmarks that vary by platform architecture
+
+Implementation example:
+```javascript
+function getPlatformFingerprint() {
+    const platformData = {
+        primary: navigator.platform,
+        userAgent: navigator.userAgent,
+        appVersion: navigator.appVersion,
+        oscpu: navigator.oscpu || 'not available',
+        architecture: detectArchitecture(),
+        platformFeatures: detectPlatformSpecificFeatures(),
+        fonts: detectPlatformSpecificFonts(),
+        performanceMetrics: measurePlatformPerformance()
+    };
+    return createHash(platformData);
+}
+```
+</fingerprinting_method>
+
+<strength_explanation>
+This method is considered strong for several reasons:
+
+1. Multi-layered Validation:
+- Cross-referencing multiple platform indicators makes spoofing more difficult
+- Inconsistencies between different platform indicators can reveal spoofing attempts
+
+2. Feature Detection:
+- Platform-specific features provide additional verification
+- Hardware-level characteristics are harder to fake than simple string values
+
+3. Performance Characteristics:
+- Different platforms exhibit unique performance patterns
+- These patterns are difficult to accurately emulate
+
+4. Persistence:
+- Platform information typically remains constant across sessions
+- Changes in platform data often indicate suspicious behavior
+
+5. Granular Information:
+- Provides detailed system information beyond basic OS detection
+- Helps distinguish between similar devices or configurations
+</strength_explanation>
+
+<limitations_and_countermeasures>
+Limitations:
+
+1. Browser Privacy Features:
+- Modern browsers may restrict or randomize platform information
+- Firefox's privacy.resistFingerprinting can mask platform details
+
+2. Virtualization:
+- Virtual machines and containers can make platform detection less reliable
+- Emulation tools can simulate different platforms
+
+Countermeasures:
+
+1. User-side:
+- Privacy-focused browsers (Tor, Brave) can standardize platform information
+- Browser extensions can randomize or mask platform-specific features
+- Virtual machines can provide platform isolation
+
+2. Browser-side:
+- Reduced precision in performance measurements
+- Standardized feature reporting across platforms
+- Client Hints API as a privacy-preserving alternative
+
+3. Technical:
+- Platform spoofing tools becoming more sophisticated
+- Increased adoption of cross-platform technologies reducing platform-specific indicators
+</limitations_and_countermeasures>",
+Media Devices Enumeration,"<fingerprinting_method>
+The Media Devices Enumeration fingerprinting method involves using the `navigator.mediaDevices.enumerateDevices()` API to obtain a comprehensive list of connected media input/output devices. The method works as follows:
+
+1. Call `navigator.mediaDevices.enumerateDevices()` to get a Promise that resolves to an array of MediaDeviceInfo objects
+2. For each device, collect:
+   - deviceId (unique identifier)
+   - kind (audioinput, videoinput, audiooutput)
+   - label (device name/description)
+   - groupId (represents physically grouped devices)
+3. Create a hash of the collected information including:
+   - Number of devices in each category
+   - Device labels and their order
+   - Group relationships between devices
+4. Combine this with additional audio/video constraints support checks using `navigator.mediaDevices.getSupportedConstraints()`
+
+Example implementation:
+```javascript
+async function getMediaDevicesFingerprint() {
+    const devices = await navigator.mediaDevices.enumerateDevices();
+    const deviceMap = {
+        audioinput: [],
+        videoinput: [],
+        audiooutput: []
+    };
+    
+    devices.forEach(device => {
+        deviceMap[device.kind].push({
+            label: device.label,
+            groupId: device.groupId
+        });
+    });
+    
+    return createHash(JSON.stringify(deviceMap));
+}
+```
+</fingerprinting_method>
+
+<strength_explanation>
+This method is particularly strong for several reasons:
+
+1. High Uniqueness:
+- The combination of available devices, their types, and configurations creates a highly unique identifier
+- Device labels often include manufacturer names and model numbers
+- Group relationships between devices provide additional entropy
+
+2. Stability:
+- Hardware configurations tend to remain stable over time
+- Group relationships between devices are consistent
+- Device order typically remains constant between sessions
+
+3. Difficulty to Spoof:
+- Requires hardware-level modifications to truly alter
+- Browser security policies make it difficult to fake device enumeration
+- Permissions requirements add additional verification layers
+
+4. Cross-browser Consistency:
+- The API is standardized across modern browsers
+- Device information remains consistent regardless of browser used
+</strength_explanation>
+
+<limitations_and_countermeasures>
+Limitations:
+
+1. Permission Requirements:
+- Modern browsers require explicit user permission for accessing detailed device information
+- Labels may be empty until permission is granted
+
+2. Privacy Modes:
+- Private browsing modes may limit or randomize device information
+- Some browsers may provide generic device listings
+
+Countermeasures:
+
+1. Browser-level:
+- Firefox's resistance to fingerprinting mode
+- Brave's fingerprinting protection
+- Chrome's planned Privacy Budget API
+
+2. User-level:
+- Using virtual audio/video devices
+- Browser extensions that spoof or block media device enumeration
+- Operating system-level device management
+
+3. Technical:
+- Some browsers may implement device ID rotation
+- Standardization efforts to reduce fingerprinting surface
+- Increasing adoption of Privacy Sandbox initiatives
+
+These limitations and countermeasures are gradually making this method less reliable, though it remains effective when combined with other fingerprinting techniques as part of a larger fingerprinting strategy.
+</limitations_and_countermeasures>",
+Browser Performance API Metrics,"<fingerprinting_method>
+The method leverages the Performance API to create a unique fingerprint by measuring multiple performance characteristics:
+
+1. Create a complex computational task (e.g., sorting large arrays, heavy DOM operations)
+2. Measure execution times using performance.now() with microsecond precision
+3. Collect multiple timing measurements:
+```javascript
+const fingerprint = {
+  computeTiming: [],
+  memoryMetrics: {},
+  navigationTiming: {}
+};
+
+// Computational benchmarks
+for(let i = 0; i < 5; i++) {
+  const start = performance.now();
+  // Complex operation (e.g., sort 10000 random numbers)
+  const array = new Array(10000).fill().map(() => Math.random());
+  array.sort();
+  fingerprint.computeTiming.push(performance.now() - start);
+}
+
+// Memory metrics (where available)
+if(performance.memory) {
+  fingerprint.memoryMetrics = {
+    jsHeapSizeLimit: performance.memory.jsHeapSizeLimit,
+    totalJSHeapSize: performance.memory.totalJSHeapSize,
+    usedJSHeapSize: performance.memory.usedJSHeapSize
+  };
+}
+
+// Navigation timing data
+const timing = performance.getEntriesByType('navigation')[0];
+fingerprint.navigationTiming = {
+  domComplete: timing.domComplete,
+  loadEventEnd: timing.loadEventEnd,
+  responseEnd: timing.responseEnd
+};
+```
+</fingerprinting_method>
+
+<strength_explanation>
+This method is particularly strong for several reasons:
+
+1. Hardware-dependent: The performance measurements are directly influenced by:
+- CPU processing power
+- Memory architecture
+- GPU capabilities
+- System load and thermal conditions
+
+2. High entropy: The combination of multiple precise timing measurements creates a highly unique identifier
+
+3. Difficult to spoof: Performance characteristics are deeply tied to hardware and system state, making them challenging to fake consistently
+
+4. Dynamic nature: Results vary slightly between measurements while maintaining consistent patterns, making it harder to detect fingerprinting while still providing reliable identification
+
+5. Cross-browser consistency: The Performance API is widely supported and provides consistent metrics across different browsers
+</strength_explanation>
+
+<limitations_and_countermeasures>
+Limitations:
+1. Results can vary based on system load and background processes
+2. Some browsers are implementing timing precision reduction as a privacy measure
+3. Performance.memory is not available in all browsers
+
+Countermeasures:
+1. Browsers may implement:
+- Reduced timing precision (e.g., Firefox's time-clamping)
+- Randomized timing jitter
+- Restricted access to performance metrics in private browsing modes
+
+2. Users can employ:
+- Resource-controlling extensions that affect performance measurements
+- Virtual machines or containers to isolate hardware characteristics
+- Privacy-focused browsers that limit Performance API access
+
+3. System-level protections:
+- CPU throttling
+- Process priority manipulation
+- Hardware virtualization
+</limitations_and_countermeasures>",
+WebRTC IP Address Leak,"<fingerprinting_method>
+The WebRTC IP address leak fingerprinting method involves creating a specialized WebRTC peer connection to force the exposure of a user's local and public IP addresses. Here's the implementation:
+
+1. Create a RTCPeerConnection with STUN server configuration:
+```javascript
+const pc = new RTCPeerConnection({
+    iceServers: [
+        {urls: 'stun:stun.l.google.com:19302'}
+    ]
+});
+
+pc.createDataChannel('');
+pc.createOffer()
+    .then(offer => pc.setLocalDescription(offer))
+    .then(() => {
+        pc.onicecandidate = (ice) => {
+            if (ice.candidate) {
+                // Extract IP addresses from candidate strings
+                const addresses = [];
+                const candidateString = ice.candidate.candidate;
+                const matches = candidateString.match(
+                    /([0-9]{1,3}(\.[0-9]{1,3}){3}|[a-f0-9]{1,4}(:[a-f0-9]{1,4}){7})/g
+                );
+                if (matches) {
+                    addresses.push(...matches);
+                }
+                // Store unique combination of addresses as fingerprint
+                const fingerprint = addresses.sort().join('|');
+            }
+        };
+    });
+```
+
+This method collects both IPv4 and IPv6 addresses, including local network addresses, which can reveal network topology and VPN usage.
+</fingerprinting_method>
+
+<strength_explanation>
+This method is particularly strong for several reasons:
+
+1. Network Context Uniqueness:
+- Combines multiple IP addresses (local, public, IPv4, IPv6)
+- Reveals network infrastructure details
+- Can detect VPN and proxy usage patterns
+
+2. Difficult to Spoof:
+- Requires low-level network stack modification
+- Browser APIs provide direct access to network interfaces
+- Real-time connection establishment makes manipulation challenging
+
+3. High Entropy:
+- Network topology information adds significant uniqueness
+- Combination of multiple addresses increases fingerprint specificity
+- Can detect changes in network environment
+
+4. Reliable Detection:
+- Works across different browsers implementing WebRTC
+- Can bypass common privacy settings
+- Provides consistent results within the same network context
+</strength_explanation>
+
+<limitations_and_countermeasures>
+Limitations:
+1. Requires JavaScript to be enabled
+2. Modern browsers increasingly implement privacy protections
+3. Network changes (e.g., switching networks) can alter the fingerprint
+4. Some browsers now require explicit permission for WebRTC
+
+Countermeasures:
+1. Browser-level WebRTC blocking:
+   - Firefox: media.peerconnection.enabled = false
+   - Chrome: WebRTC Control extensions
+
+2. VPN services with WebRTC leak protection
+
+3. Recent browser implementations:
+   - Private mode blocking of WebRTC
+   - IP address masking in WebRTC
+   - Explicit permission requirements for WebRTC connections
+
+4. Network-level controls:
+   - Firewall rules blocking STUN/TURN servers
+   - Corporate policies restricting WebRTC usage
+</limitations_and_countermeasures>",
+Pointer Events Behavior,"<fingerprinting_method>
+The method involves creating a comprehensive pointer events behavior profile by:
+
+1. Detecting support for different pointer types (mouse, touch, pen)
+2. Measuring pointer event properties:
+   - pressure sensitivity levels
+   - tiltX and tiltY values
+   - width and height of contact area
+   - pointerType identification
+3. Creating an event sequence map by:
+   ```javascript
+   function capturePointerProfile() {
+     const profile = {
+       events: {},
+       properties: {},
+       sequence: []
+     };
+     
+     const eventTypes = ['pointerdown', 'pointermove', 'pointerup'];
+     const element = document.createElement('div');
+     
+     eventTypes.forEach(type => {
+       element.addEventListener(type, (e) => {
+         profile.events[type] = {
+           pressure: e.pressure,
+           tiltX: e.tiltX,
+           tiltY: e.tiltY,
+           width: e.width,
+           height: e.height,
+           pointerType: e.pointerType
+         };
+         profile.sequence.push(type);
+       });
+     });
+     
+     return profile;
+   }
+   ```
+4. Analyzing behavior patterns across multiple interactions to create a unique signature
+</fingerprinting_method>
+
+<strength_explanation>
+This method is particularly strong because:
+
+1. High Uniqueness:
+- Pointer behavior combines hardware characteristics with user interaction patterns
+- Pressure sensitivity values vary significantly between devices
+- The combination of properties creates a highly distinctive profile
+
+2. Difficult to Spoof:
+- Requires simultaneous manipulation of multiple properties
+- Hardware-dependent values are challenging to artificially reproduce
+- Event sequences reflect natural interaction patterns
+
+3. Persistence:
+- Hardware-specific characteristics remain consistent across sessions
+- User interaction patterns tend to be stable over time
+- Combined signature is reliable for long-term tracking
+
+4. Anti-Detection Resistance:
+- Appears as normal user interaction behavior
+- Difficult for privacy tools to block without breaking site functionality
+- Can operate passively without suspicious API calls
+</strength_explanation>
+
+<limitations_and_countermeasures>
+Limitations:
+
+1. Device-Dependent:
+- May not work on devices without pointer support
+- Different hardware capabilities can affect consistency
+- Mobile devices may provide limited pointer data
+
+2. Countermeasures:
+- Browsers may standardize pointer event properties
+- Privacy-focused browsers might normalize pointer values
+- Users can disable pointer events (though at cost of functionality)
+
+3. Technical Constraints:
+- Requires active user interaction
+- May be affected by hardware driver updates
+- Can be influenced by system settings
+
+Potential mitigations:
+- Use of pointer event randomization
+- Browser extensions that normalize pointer behavior
+- Hardware-level input abstraction layers
+- Progressive enhancement for devices without pointer support
+</limitations_and_countermeasures>",
+"Ad Blocker Used
+","<fingerprinting_method>
+The method involves a multi-layered detection approach for ad blockers:
+
+1. Bait Element Detection:
+- Create invisible ""bait"" elements with common ad-related classnames and IDs
+- Monitor these elements for removal or modification
+- Use multiple baits with varying characteristics to detect different blocklist rules
+
+2. Network Request Analysis:
+- Attempt to load common advertising resources
+- Monitor the success/failure of these requests
+- Track timing differences in request handling
+
+3. Script Behavior Analysis:
+- Detect modifications to common advertising-related JavaScript functions
+- Monitor for presence of ad blocker-specific JavaScript variables
+- Check for interference with analytics and tracking scripts
+
+4. Pattern Recognition:
+- Analyze DOM modifications characteristic of specific ad blockers
+- Monitor for changes in page layout and element positioning
+- Track CSS rule modifications
+</fingerprinting_method>
+
+<strength_explanation>
+This method is particularly strong for several reasons:
+
+1. High Accuracy:
+- Different ad blockers leave distinct fingerprints through their blocking patterns
+- The combination of multiple detection methods creates a more reliable identifier
+- Can often identify specific ad blocker implementations
+
+2. Difficult to Spoof:
+- Ad blockers must actively block content to function
+- Blocking patterns are integral to their operation and hard to randomize
+- Multiple detection layers make comprehensive spoofing challenging
+
+3. Stability:
+- Ad blocker configurations tend to remain consistent across sessions
+- Users rarely change their ad blocking setup frequently
+- Provides reliable tracking across multiple visits
+
+4. Additional Context:
+- Reveals user privacy preferences and technical sophistication
+- Can indicate other privacy tools in use
+- Provides insights into user behavior patterns
+</strength_explanation>
+
+<limitations_and_countermeasures>
+Limitations:
+
+1. Detection Avoidance:
+- Advanced ad blockers can implement stealth techniques
+- Some blockers can randomize their blocking patterns
+- Users may employ multiple or rotating ad blockers
+
+2. False Positives:
+- Network issues can mimic ad blocker behavior
+- Browser security features may interfere with detection
+- Corporate firewalls can produce similar patterns
+
+Countermeasures:
+
+1. User-Side:
+- Using script-blocking extensions
+- Employing anti-fingerprinting browsers
+- Using containerized browsing environments
+
+2. Browser-Side:
+- Implementation of privacy-focused APIs
+- Standardization of content blocking behaviors
+- Enhanced fingerprinting protection features
+
+3. Ad Blocker Evolution:
+- Development of more sophisticated stealth techniques
+- Implementation of randomization features
+- Integration with broader privacy protection tools
+</limitations_and_countermeasures>",
+WebAssembly Performance Characteristics,"<fingerprinting_method>
+The WebAssembly Performance Fingerprinting method involves creating a suite of carefully crafted WebAssembly modules that perform specific computational tasks. The method:
+
+1. Deploys multiple WebAssembly modules performing different operations:
+   - Floating-point arithmetic sequences
+   - Memory access patterns
+   - SIMD operations (where available)
+   - Complex mathematical calculations
+
+2. Measures execution times with high-precision timestamps:
+```javascript
+const wasmFingerprint = async () => {
+    const results = [];
+    const module = await WebAssembly.compile(wasmBinaryCode);
+    
+    for (let i = 0; i < 10; i++) {
+        const start = performance.now();
+        await WebAssembly.instantiate(module);
+        const executionTime = performance.now() - start;
+        results.push(executionTime);
+    }
+    
+    return calculateFingerprintHash(results);
+};
+```
+
+3. Analyzes performance patterns across:
+   - Different optimization levels
+   - Various memory allocation sizes
+   - Compiler-specific optimizations
+</fingerprinting_method>
+
+<strength_explanation>
+This method is particularly strong because:
+
+1. Hardware Dependency: WebAssembly performance characteristics are deeply tied to:
+   - CPU architecture
+   - Memory subsystem
+   - Hardware-level optimizations
+   - Microarchitectural features
+
+2. High Entropy: The performance measurements provide multiple data points that combine to create a highly unique fingerprint, as they reflect:
+   - Specific hardware capabilities
+   - Browser implementation details
+   - Operating system optimizations
+
+3. Stability: Performance patterns remain relatively consistent for a given device/browser combination, while varying significantly across different configurations.
+
+4. Difficulty to Spoof: Accurately simulating specific WebAssembly performance characteristics requires deep understanding of hardware behavior and is computationally expensive to fake.
+</strength_explanation>
+
+<limitations_and_countermeasures>
+Limitations:
+
+1. Environmental Factors:
+   - System load can affect timing measurements
+   - Background processes may introduce noise
+   - Temperature throttling can alter performance characteristics
+
+2. Browser Mitigations:
+   - Reduced timer precision in privacy-focused browsers
+   - Potential future implementation of noise addition to timing measurements
+   - Possible restrictions on WebAssembly in private browsing modes
+
+Countermeasures:
+
+1. User-side:
+   - Using browsers with WebAssembly restrictions
+   - Employing privacy-focused extensions that limit WebAssembly execution
+   - Running browsers in sandboxed environments
+
+2. Browser-level:
+   - Implementation of standardized WebAssembly performance characteristics
+   - Addition of random timing jitter
+   - Limiting access to high-precision timing in certain contexts
+</limitations_and_countermeasures>",
+CSS Feature Detection Results,"<fingerprinting_method>
+The method involves creating a comprehensive CSS feature detection matrix by:
+1. Testing a wide array of modern CSS properties and values (300+ features)
+2. Checking both standard and vendor-prefixed properties
+3. Testing experimental CSS features
+4. Verifying computed styles for pseudo-elements and pseudo-classes
+5. Analyzing CSS custom property support
+
+Sample implementation:
+```javascript
+function detectCSSFeatures() {
+    const testElement = document.createElement('div');
+    const features = {};
+    
+    // Test modern CSS properties
+    const properties = [
+        'backdrop-filter',
+        'contain-intrinsic-size',
+        'accent-color',
+        'aspect-ratio',
+        // ... many more properties
+    ];
+    
+    // Test values and computations
+    properties.forEach(prop => {
+        testElement.style[prop] = 'initial';
+        features[prop] = {
+            supported: testElement.style[prop] !== '',
+            computedValue: getComputedStyle(testElement)[prop]
+        };
+    });
+    
+    // Test @supports conditions
+    features.supports = {
+        'grid': CSS.supports('display: grid'),
+        'subgrid': CSS.supports('grid-template-columns: subgrid'),
+        // ... additional @supports tests
+    };
+    
+    return features;
+}
+```
+</fingerprinting_method>
+
+<strength_explanation>
+This method is particularly strong because:
+
+1. High Entropy: CSS feature support varies significantly across:
+- Browser vendors
+- Browser versions
+- Operating systems
+- Device types
+Creating a highly unique identifier
+
+2. Stability: CSS feature support doesn't typically change between sessions unless the browser is updated
+
+3. Difficulty to Spoof:
+- Requires deep knowledge of CSS implementations
+- Must accurately emulate complex interactions between features
+- Browser-specific implementations create unique patterns
+
+4. Comprehensive Coverage:
+- Tests both standardized and experimental features
+- Includes vendor-specific implementations
+- Captures subtle differences in computed values
+
+5. Performance:
+- Can be executed quickly
+- Minimal impact on page load
+- Results can be cached
+</strength_explanation>
+
+<limitations_and_countermeasures>
+Limitations:
+
+1. Browser Updates:
+- Regular updates can change feature support
+- May require fingerprint recalibration
+
+2. Feature Convergence:
+- As browsers standardize implementations, uniqueness may decrease
+- Modern browsers increasingly support similar features
+
+Countermeasures:
+
+1. Browser-level:
+- Privacy-focused browsers may standardize CSS feature reporting
+- Browsers might implement random feature reporting
+
+2. User-level:
+- CSS feature spoofing extensions
+- Privacy-focused browsers like Tor standardize CSS implementations
+- Containerized browsing environments
+
+3. Technical Limitations:
+- Some features may be environment-dependent
+- Virtual machines or emulators might affect detection accuracy
+
+To maintain effectiveness, the method should:
+- Regularly update the feature test set
+- Include new experimental properties
+- Adapt to evolving browser privacy measures
+- Combine with other fingerprinting techniques for increased reliability
+</limitations_and_countermeasures>",
+Speech Synthesis Voices,"<fingerprinting_method>
+The Speech Synthesis Voices fingerprinting method involves:
+1. Enumerating all available voices using window.speechSynthesis.getVoices()
+2. Creating a unique hash by collecting for each voice:
+   - name
+   - lang (language code)
+   - voiceURI
+   - localService status
+   - default status
+3. Additionally capturing:
+   - Total number of voices
+   - Ordering of voices
+   - Vendor-specific voice properties
+4. Implementing continuous monitoring for dynamic voice loading
+
+Example implementation:
+```javascript
+function getSpeechFingerprintAsync() {
+  return new Promise((resolve) => {
+    let voices = window.speechSynthesis.getVoices();
+    if (voices.length) {
+      processVoices(voices);
+    } else {
+      speechSynthesis.onvoiceschanged = () => {
+        voices = window.speechSynthesis.getVoices();
+        processVoices(voices);
+      };
+    }
+    
+    function processVoices(voices) {
+      const voiceMap = voices.map(voice => ({
+        name: voice.name,
+        lang: voice.lang,
+        uri: voice.voiceURI,
+        local: voice.localService,
+        default: voice.default,
+        vendor: voice.hasOwnProperty('_vendorData')
+      }));
+      resolve(JSON.stringify(voiceMap));
+    }
+  });
+}
+```
+</fingerprinting_method>
+
+<strength_explanation>
+This method is particularly strong because:
+1. High Uniqueness:
+- Voice combinations vary significantly across operating systems
+- Language packs and regional settings create distinct patterns
+- Vendor-specific voices add additional entropy
+- Order and availability of voices differs between browsers
+
+2. Stability:
+- Voice configurations rarely change without system updates
+- Consistent across browser sessions
+- Resistant to common clearing techniques like cache clearing
+
+3. Difficulty to Spoof:
+- Voice APIs are deeply integrated into the system
+- Requires significant effort to modify or fake voice listings
+- Browser security measures prevent easy manipulation
+
+4. Cross-browser Consistency:
+- Core voice properties remain stable across different browsers on the same system
+- Provides reliable tracking even when users switch browsers
+</strength_explanation>
+
+<limitations_and_countermeasures>
+Limitations:
+1. Delayed Availability:
+- Voice lists may load asynchronously
+- Initial fingerprint generation might be delayed
+
+2. Platform Restrictions:
+- Some browsers limit access to voice APIs
+- Mobile platforms may have limited voice options
+- Privacy-focused browsers might restrict access
+
+Countermeasures:
+1. User-side:
+- Using privacy-focused browsers that standardize voice lists
+- Voice API blocking through browser extensions
+- System-level voice package standardization
+
+2. Browser-side:
+- Implementing standardized voice lists
+- Randomizing voice order
+- Limiting voice API access in private browsing modes
+
+3. Platform-level:
+- OS-level voice standardization
+- Containerization of voice services
+- Dynamic voice loading restrictions
+</limitations_and_countermeasures>",
+Font Rendering Differences,"<fingerprinting_method>
+The method involves rendering a set of carefully selected characters using different font families and analyzing the resulting pixel patterns. Here's the specific approach:
+
+1. Create an off-screen canvas element
+2. Render a sequence of characters that are known to have distinct rendering characteristics across different font engines (e.g., ""g"", ""ß"", ""@"", ""❤"")
+3. Use multiple font variations including:
+   - System fonts
+   - Web-safe fonts
+   - Custom fonts with specific features
+4. For each character and font combination:
+   - Render at multiple sizes (e.g., 12px, 14px, 16px)
+   - Extract pixel data using getImageData()
+   - Calculate precise measurements of:
+     * Character width and height
+     * Pixel color values at specific positions
+     * Sub-pixel rendering patterns
+5. Generate a hash of the combined measurements
+
+The method also includes analyzing font-smoothing and anti-aliasing characteristics, which vary significantly across operating systems and graphics drivers.
+</fingerprinting_method>
+
+<strength_explanation>
+This method is particularly strong for several reasons:
+
+1. High Uniqueness:
+- Font rendering involves complex interactions between the OS, graphics drivers, and browser
+- Sub-pixel rendering patterns are highly dependent on hardware configuration
+- The combination of multiple fonts and characters creates a large entropy space
+
+2. Stability:
+- Font rendering behavior remains consistent across browser sessions
+- Hardware-level characteristics are difficult to change
+- System-level font configurations rarely change
+
+3. Resistance to Spoofing:
+- Font rendering involves low-level graphics operations that are difficult to virtualize
+- Attempting to modify rendering behavior often requires system-level changes
+- Even small differences in rendering can be detected with pixel-level analysis
+</strength_explanation>
+
+<limitations_and_countermeasures>
+Limitations:
+1. Performance impact due to multiple rendering operations
+2. May be affected by system updates that change font rendering
+3. Some newer browsers implement canvas fingerprinting protection
+
+Countermeasures:
+1. Browser-level:
+- Canvas fingerprinting blockers
+- Standardized font rendering across platforms
+- Permission prompts for canvas operations
+
+2. User-level:
+- Disabling font smoothing
+- Using system-wide font settings that match common configurations
+- Browser extensions that randomize canvas data
+
+3. OS-level:
+- Font rendering standardization efforts
+- Graphics driver updates that normalize rendering behavior
+
+The effectiveness of these countermeasures varies, and implementing them may impact user experience or website functionality.
+</limitations_and_countermeasures>",
+Passive TCP/IP Stack Fingerprinting,"<fingerprinting_method>
+The passive TCP/IP stack fingerprinting method involves analyzing unique characteristics of network packets sent by a device without actively sending probing packets. The method works by:
+
+1. Capturing and analyzing TCP/IP packet headers, including:
+- Initial TTL values
+- TCP window size
+- TCP options order and values
+- TCP Maximum Segment Size (MSS)
+- IP ID generation patterns
+- TCP timestamp patterns
+
+2. Creating a signature based on:
+- OS-specific TCP/IP stack implementations
+- Network stack customizations
+- TCP congestion control algorithms
+- TCP timestamp increment patterns
+
+3. Implementing machine learning algorithms to:
+- Identify patterns in packet behavior
+- Correlate multiple sessions
+- Detect OS and device-specific characteristics
+</fingerprinting_method>
+
+<strength_explanation>
+This method is particularly strong because:
+
+1. High Uniqueness:
+- Different operating systems and devices implement TCP/IP stacks differently
+- Network stack configurations are rarely modified by users
+- Combinations of parameters create highly distinctive signatures
+
+2. Persistence:
+- TCP/IP stack behavior remains consistent across browser sessions
+- Changes typically only occur with OS updates or device changes
+- Patterns persist even when using VPNs or proxies
+
+3. Difficulty to Spoof:
+- TCP/IP stack behavior is controlled at the OS level
+- Modifying stack behavior requires kernel-level changes
+- Real-time packet behavior is hard to consistently fake
+
+4. Passive Nature:
+- No active probing required, making detection difficult
+- Can be performed without user awareness
+- Works even with encrypted traffic
+</strength_explanation>
+
+<limitations_and_countermeasures>
+Limitations:
+
+1. Technical Constraints:
+- Requires access to network-level packet data
+- May be affected by network conditions
+- Less effective behind NAT or shared connections
+
+2. Legal and Privacy Restrictions:
+- Packet capture may require special permissions
+- May violate privacy regulations in some jurisdictions
+- Limited effectiveness with encrypted protocols
+
+Countermeasures:
+
+1. User-side:
+- Using specialized TCP/IP stack randomization tools
+- Implementing custom network stack configurations
+- Using security-focused operating systems
+
+2. Network-level:
+- Network-level packet normalization
+- TCP/IP header sanitization
+- Implementation of strict firewall rules
+
+3. Browser/OS Vendors:
+- Standardizing TCP/IP stack implementations
+- Implementing privacy-preserving networking features
+- Regular updates to prevent fingerprinting
+</limitations_and_countermeasures>",
+Network Information API Data,"<fingerprinting_method>
+The Network Information API fingerprinting method combines multiple network-related data points to create a comprehensive network signature:
+
+```javascript
+async function getNetworkFingerprint() {
+    const connection = navigator.connection || 
+                      navigator.mozConnection || 
+                      navigator.webkitConnection;
+    
+    let networkData = {
+        effectiveType: connection.effectiveType,
+        downlink: connection.downlink,
+        rtt: connection.rtt,
+        saveData: connection.saveData,
+        type: connection.type,
+        dynamicMetrics: []
+    };
+
+    // Monitor network changes over a brief period
+    await new Promise(resolve => {
+        const changes = [];
+        const observer = () => {
+            changes.push({
+                timestamp: Date.now(),
+                effectiveType: connection.effectiveType,
+                downlink: connection.downlink,
+                rtt: connection.rtt
+            });
+        };
+        connection.addEventListener('change', observer);
+        setTimeout(() => {
+            connection.removeEventListener('change', observer);
+            networkData.dynamicMetrics = changes;
+            resolve();
+        }, 5000);
+    });
+
+    return btoa(JSON.stringify(networkData));
+}
+```
+
+This method captures both static and dynamic network characteristics, including connection type, speed variations, and latency patterns.
+</fingerprinting_method>
+
+<strength_explanation>
+This method is particularly strong for several reasons:
+
+1. Multi-dimensional data: It captures multiple network attributes simultaneously, increasing uniqueness.
+
+2. Dynamic monitoring: By observing network changes over time, it creates a more distinctive signature that's harder to spoof.
+
+3. Environmental context: Network characteristics often reflect:
+   - Geographic location
+   - Internet service provider
+   - Device capabilities
+   - User movement patterns
+
+4. Persistence: Network patterns tend to be consistent for users within the same:
+   - Physical location
+   - Time of day
+   - Regular routines
+
+5. Correlation potential: The data can be cross-referenced with other fingerprinting attributes for higher accuracy.
+</strength_explanation>
+
+<limitations_and_countermeasures>
+Limitations:
+
+1. Browser Support:
+- The Network Information API isn't universally supported
+- Implementation varies across browsers
+
+2. Variability:
+- Network conditions can change significantly
+- Mobile users may experience frequent changes
+- VPN usage can alter network characteristics
+
+Countermeasures:
+
+1. User-side:
+- VPN services can mask true network characteristics
+- Network throttling tools can manipulate connection properties
+- Browsers can be configured to report false network information
+
+2. Browser-side:
+- Some browsers limit or disable Network Information API
+- Privacy-focused browsers may return standardized values
+- Progressive Web Apps might have restricted access to network information
+
+3. Technical:
+- Network data can be randomized or normalized
+- API access can be blocked or modified by privacy extensions
+- Containerization can isolate network fingerprinting attempts
+</limitations_and_countermeasures>",
+Web Worker Performance Characteristics,"<fingerprinting_method>
+The method involves creating multiple Web Workers that perform computationally intensive tasks and measuring their performance characteristics. Specifically:
+
+1. Deploy a series of Web Workers performing different types of calculations:
+   - Cryptographic operations (SHA-256 hashing)
+   - Floating-point math operations
+   - Memory allocation/deallocation patterns
+   - Thread scheduling behavior
+
+2. Measure and collect:
+   - Execution time deltas between workers
+   - Thread creation latency
+   - Memory allocation speeds
+   - Task queue processing patterns
+   - Worker termination timing
+
+3. Create a composite signature by:
+   - Calculating statistical variations in performance metrics
+   - Analyzing thread scheduling patterns
+   - Measuring inter-worker communication latency
+   - Recording CPU throttling behavior
+
+The collected metrics are then normalized and hashed into a fingerprint value.
+</fingerprinting_method>
+
+<strength_explanation>
+This method is particularly strong because:
+
+1. Hardware Dependency: Worker performance characteristics are tightly coupled with:
+   - CPU architecture and capabilities
+   - Available system resources
+   - Operating system thread scheduling
+   - Browser implementation details
+
+2. High Entropy: The combination of multiple performance metrics provides high uniqueness:
+   - Performance patterns vary significantly across different devices
+   - Even similar hardware shows measurable variations
+   - System load and thermal conditions create unique signatures
+
+3. Difficult to Spoof:
+   - Performance characteristics are deeply tied to hardware/software stack
+   - Attempting to modify these metrics would require low-level system access
+   - Virtualization or emulation typically reveals detectable patterns
+
+4. Persistence:
+   - Hardware-based characteristics remain relatively stable
+   - Changes in system conditions provide additional fingerprinting signals
+</strength_explanation>
+
+<limitations_and_countermeasures>
+Limitations:
+
+1. Variability:
+   - System load can affect measurements
+   - Temperature and power state changes impact results
+   - Background processes may interfere with timing
+
+2. Browser Restrictions:
+   - Increasing privacy features may limit Worker capabilities
+   - Some browsers may standardize Worker behavior
+   - Resource isolation may affect measurement accuracy
+
+Countermeasures:
+
+1. Browser-level:
+   - Standardizing Worker performance characteristics
+   - Introducing artificial delays or randomization
+   - Limiting precision of performance timestamps
+
+2. User-level:
+   - Using browser extensions that disable Web Workers
+   - Resource isolation through containerization
+   - System-level resource controls
+
+3. Hardware-level:
+   - Virtual machines with standardized performance characteristics
+   - CPU frequency scaling
+   - Thread scheduling randomization
+</limitations_and_countermeasures>",
+Web Audio API Fingerprinting,"<fingerprinting_method>
+The Web Audio API fingerprinting method utilizes the AudioContext and OscillatorNode to generate and process audio signals, creating a unique fingerprint based on how the browser processes audio. Here's the implementation:
+
+```javascript
+async function getAudioFingerprint() {
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    const oscillator = audioContext.createOscillator();
+    const analyser = audioContext.createAnalyser();
+    const gainNode = audioContext.createGain();
+    const scriptProcessor = audioContext.createScriptProcessor(4096, 1, 1);
+
+    // Configure nodes
+    analyser.fftSize = 2048;
+    gainNode.gain.value = 0; // Mute the sound
+    oscillator.type = 'triangle';
+    oscillator.frequency.setValueAtTime(10000, audioContext.currentTime);
+
+    // Connect nodes
+    oscillator.connect(analyser);
+    analyser.connect(scriptProcessor);
+    scriptProcessor.connect(gainNode);
+    gainNode.connect(audioContext.destination);
+
+    // Collect frequency data
+    const fingerprint = await new Promise(resolve => {
+        const frequencies = new Uint8Array(analyser.frequencyBinCount);
+        scriptProcessor.onaudioprocess = () => {
+            analyser.getByteFrequencyData(frequencies);
+            resolve(Array.from(frequencies).join(','));
+        };
+        oscillator.start(0);
+    });
+
+    // Cleanup
+    oscillator.stop();
+    audioContext.close();
+    return fingerprint;
+}
+```
+</fingerprinting_method>
+
+<strength_explanation>
+This method is considered strong for several reasons:
+
+1. High Uniqueness: The audio processing characteristics vary significantly across different devices, operating systems, and audio hardware configurations, providing a highly unique identifier.
+
+2. Hardware Dependencies: The fingerprint is influenced by both software (audio drivers, browser implementation) and hardware (sound card, audio processing chips), making it harder to spoof.
+
+3. Stability: The generated fingerprint remains relatively consistent for the same device/browser combination across sessions.
+
+4. Complex Implementation: The multi-step audio processing chain makes it difficult to accurately emulate or modify the behavior without affecting the entire audio subsystem.
+
+5. Cross-browser Differences: Different browsers implement the Web Audio API slightly differently, adding another layer of identification capability.
+</strength_explanation>
+
+<limitations_and_countermeasures>
+Limitations:
+1. Audio permission requirements in some browsers may trigger user notifications
+2. Some browsers are implementing privacy features that standardize audio processing
+3. Performance impact when processing audio signals
+4. May not work in browsers with Web Audio API disabled
+
+Countermeasures:
+1. Browsers like Brave implement audio API standardization to reduce uniqueness
+2. Privacy-focused extensions can block or modify Web Audio API behavior
+3. Some security-focused browsers may return randomized values for audio processing
+4. Users can disable audio processing capabilities entirely
+5. Virtual machines or containerized browsers may provide different audio fingerprints
+
+The effectiveness of this method may decrease as browsers continue to implement stronger privacy protections and standardization measures.
+</limitations_and_countermeasures>",
+Encrypted Media Extensions (EME) Configuration,"<fingerprinting_method>
+The EME Configuration fingerprinting method involves:
+1. Querying available Content Decryption Modules (CDMs) using navigator.requestMediaKeySystemAccess()
+2. Creating a detailed profile of supported DRM configurations including:
+   - Supported key systems (Widevine, PlayReady, FairPlay)
+   - Supported codecs and their configurations
+   - Robustness levels
+   - Persistent license support
+   - Hardware security level requirements
+3. Generating a hash of the combined configuration data
+4. Cross-referencing with device capabilities and OS information
+
+Sample implementation:
+```javascript
+async function getEMEFingerprint() {
+  const keySystems = [
+    'com.widevine.alpha',
+    'com.microsoft.playready',
+    'com.apple.fps'
+  ];
+  const configurations = {
+    initDataTypes: ['cenc'],
+    audioCapabilities: [
+      { contentType: 'audio/mp4;codecs=""mp4a.40.2""' }
+    ],
+    videoCapabilities: [
+      { contentType: 'video/mp4;codecs=""avc1.42E01E""' }
+    ]
+  };
+  
+  let emeProfile = {};
+  for (const system of keySystems) {
+    try {
+      const support = await navigator.requestMediaKeySystemAccess(
+        system, 
+        [configurations]
+      );
+      emeProfile[system] = await support.getConfiguration();
+    } catch(e) {
+      emeProfile[system] = null;
+    }
+  }
+  return emeProfile;
+}
+```
+</fingerprinting_method>
+
+<strength_explanation>
+This method is particularly strong because:
+1. EME configurations are highly device and browser-specific, providing strong entropy
+2. The combination of supported DRM systems, codecs, and security levels creates a detailed unique identifier
+3. EME configurations are typically hardware-dependent and difficult to spoof
+4. Changes to EME support usually require system-level updates, making the fingerprint relatively stable
+5. The data gathered is resistant to common privacy measures like private browsing or VPNs
+6. Different device manufacturers implement varying DRM support, adding to uniqueness
+7. The method provides both broad categorization (device type) and specific identification (exact configuration)
+</strength_explanation>
+
+<limitations_and_countermeasures>
+Limitations:
+1. Requires JavaScript execution and appropriate permissions
+2. Some browsers may restrict access to detailed EME information
+3. Virtual machines or emulators may present inconsistent results
+
+Countermeasures:
+1. Browsers could standardize EME reporting to reduce uniqueness
+2. Privacy-focused browsers might return generic EME configurations
+3. Users can disable DRM support entirely, though this impacts media playback
+4. Container-based solutions might virtualize EME responses
+5. Future W3C specifications might limit the granularity of EME information exposed to scripts
+
+The effectiveness of these countermeasures often comes at the cost of reduced functionality for legitimate DRM-protected content consumption.
+</limitations_and_countermeasures>",
+Gamepad API Enumeration,"<fingerprinting_method>
+The Gamepad API fingerprinting method involves creating a comprehensive signature by:
+1. Enumerating all connected gamepads using navigator.getGamepads()
+2. Collecting detailed properties for each detected gamepad:
+   - id (manufacturer and model information)
+   - mapping standard
+   - axes count and precision values
+   - buttons count and characteristics
+   - timestamp patterns of API responses
+3. Monitoring gamepad connection/disconnection events
+4. Creating a hash of combined properties including:
+   ```javascript
+   function createGamepadFingerprint() {
+     const gamepads = navigator.getGamepads();
+     let fingerprint = {
+       count: 0,
+       devices: [],
+       supportedAPIs: {
+         vibration: 'getGamepads' in navigator,
+         force: 'GamepadHapticActuator' in window
+       }
+     };
+     
+     for(let gamepad of gamepads) {
+       if(gamepad) {
+         fingerprint.count++;
+         fingerprint.devices.push({
+           id: gamepad.id,
+           axes: gamepad.axes.length,
+           buttons: gamepad.buttons.length,
+           mapping: gamepad.mapping,
+           timestamp: gamepad.timestamp
+         });
+       }
+     }
+     return fingerprint;
+   }
+   ```
+</fingerprinting_method>
+
+<strength_explanation>
+This method is particularly strong because:
+1. High Entropy: Gaming peripherals provide rich identifying information through:
+   - Diverse hardware configurations
+   - Specific manufacturer/model combinations
+   - Unique button/axis configurations
+
+2. Persistence: Gaming peripherals tend to remain consistent across sessions as users rarely change their gaming setup.
+
+3. Difficult to Spoof: The Gamepad API provides low-level hardware access that is challenging to virtualize or fake convincingly.
+
+4. Cross-Reference Potential: Can be combined with other hardware fingerprinting methods for increased accuracy.
+
+5. Platform Specificity: Gaming peripherals often indicate specific operating systems and driver configurations, adding to uniqueness.
+</strength_explanation>
+
+<limitations_and_countermeasures>
+Limitations:
+1. Requires connected gaming peripherals to be effective
+2. May provide inconsistent results if peripherals are frequently connected/disconnected
+3. Not applicable to users without gaming hardware
+
+Countermeasures:
+1. Browsers may implement:
+   - Standardized gamepad reporting
+   - API access restrictions
+   - Permission prompts for gamepad access
+
+2. Users can:
+   - Disconnect gaming peripherals during sensitive browsing
+   - Use virtualization software to standardize gamepad reporting
+   - Employ privacy-focused browsers that limit Gamepad API access
+
+3. Privacy extensions may:
+   - Block or randomize Gamepad API responses
+   - Provide fake standardized gamepad configurations
+   - Require explicit user consent for gamepad detection
+</limitations_and_countermeasures>",
+WebGL Extensions Support,"<fingerprinting_method>
+The WebGL Extensions fingerprinting method involves creating a comprehensive profile by:
+
+1. Enumerating all available WebGL extensions using:
+```javascript
+const canvas = document.createElement('canvas');
+const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+const extensions = gl.getSupportedExtensions();
+
+// Create a detailed extension profile
+const extensionProfile = extensions.reduce((profile, ext) => {
+    const extension = gl.getExtension(ext);
+    profile[ext] = {
+        supported: !!extension,
+        parameters: getExtensionParameters(gl, extension, ext)
+    };
+    return profile;
+}, {});
+
+// Get specific parameters for each extension
+function getExtensionParameters(gl, extension, extName) {
+    const parameters = {};
+    if (extName.includes('WEBGL_debug_renderer_info')) {
+        parameters.vendor = gl.getParameter(extension.UNMASKED_VENDOR_WEBGL);
+        parameters.renderer = gl.getParameter(extension.UNMASKED_RENDERER_WEBGL);
+    }
+    return parameters;
+}
+```
+
+2. Analyzing extension behavior patterns by testing specific capabilities and performance characteristics of each extension.
+
+3. Creating a hash of the combined extension data, including their availability, parameters, and behavior patterns.
+</fingerprinting_method>
+
+<strength_explanation>
+This method is particularly strong because:
+
+1. High Uniqueness:
+- WebGL extensions vary significantly across different GPU/driver combinations
+- The combination of supported extensions creates a highly distinctive profile
+- Parameter values within extensions provide additional entropy
+
+2. Hardware Dependency:
+- Extensions are tied to physical hardware capabilities
+- Difficult to accurately emulate or spoof without matching hardware
+- Provides indirect information about the user's GPU and drivers
+
+3. Stability:
+- Extension support typically remains consistent unless hardware or drivers change
+- Parameters are generally stable across sessions
+- Changes in extension support can indicate device switching
+
+4. Depth of Information:
+- Provides multiple layers of identifying information
+- Combines both binary (support/no support) and continuous (parameter values) data
+- Can reveal specific hardware capabilities and configurations
+</strength_explanation>
+
+<limitations_and_countermeasures>
+Limitations:
+
+1. Browser Restrictions:
+- Some browsers are implementing privacy-focused WebGL restrictions
+- Access to certain extensions might require explicit user permission
+- Some browsers standardize WebGL reporting across different hardware
+
+2. Virtualization Impact:
+- Virtual machines and cloud gaming services may present standardized WebGL profiles
+- Hardware acceleration settings can affect extension availability
+
+Countermeasures:
+
+1. Browser-level:
+- WebGL fingerprinting protection in privacy-focused browsers
+- Extension access restrictions
+- Standardized extension reporting
+
+2. User-level:
+- Disabling WebGL
+- Using WebGL blocking extensions
+- Virtual machines with standardized graphics configurations
+
+3. Platform-level:
+- OS-level graphics virtualization
+- Driver-level privacy protections
+- Hardware abstraction layers
+
+The effectiveness of these countermeasures varies, and implementing them often involves trading functionality for privacy.
+</limitations_and_countermeasures>",
+Screen Size and Color Depth,"<fingerprinting_method>
+The method combines multiple screen-related properties to create a comprehensive fingerprint:
+
+1. Primary data collection:
+```javascript
+const screenFingerprint = {
+    width: window.screen.width,
+    height: window.screen.height,
+    availWidth: window.screen.availWidth,
+    availHeight: window.screen.availHeight,
+    colorDepth: window.screen.colorDepth,
+    pixelDepth: window.screen.pixelDepth,
+    devicePixelRatio: window.devicePixelRatio,
+    orientation: window.screen.orientation.type
+};
+```
+
+2. Extended properties:
+```javascript
+const extendedProperties = {
+    mediaQueries: detectMediaQuerySupport(),
+    scalingBehavior: detectScalingBehavior(),
+    rotationSupport: checkRotationCapabilities()
+};
+```
+
+3. Dynamic monitoring:
+```javascript
+window.matchMedia(""(orientation: portrait)"").addListener(
+    () => updateFingerprint()
+);
+```
+
+The method creates a hash of these combined properties and monitors for changes that might indicate genuine device rotation versus spoofing attempts.
+</fingerprinting_method>
+
+<strength_explanation>
+This method is considered strong for several reasons:
+
+1. Multi-dimensional data:
+- Combines fixed hardware characteristics (resolution, color depth) with dynamic properties (orientation, scaling)
+- Includes device-specific attributes that are harder to spoof consistently
+
+2. High entropy:
+- Screen specifications vary significantly across devices
+- The combination of all collected properties creates highly distinctive profiles
+- Device pixel ratio and scaling behavior add additional uniqueness
+
+3. Persistence:
+- Hardware-based attributes remain consistent across browser sessions
+- Changes in orientation or scaling follow predictable patterns
+- Anomaly detection can identify artificial modifications
+
+4. Technical constraints:
+- Many properties are hardware-dependent and cannot be easily modified
+- Attempting to spoof one property often creates inconsistencies with others
+- Operating system and hardware limitations create natural boundaries
+</strength_explanation>
+
+<limitations_and_countermeasures>
+Limitations:
+
+1. Technical constraints:
+- Modern browsers may round or normalize certain values
+- Virtual machines and emulators can present artificial values
+- Some properties may be unavailable in privacy-focused browsers
+
+2. Countermeasures:
+- Privacy-focused browsers may return standardized screen resolutions
+- Canvas fingerprinting blockers might affect scaling detection
+- Users can modify their display settings or use zoom features
+
+3. Mitigation strategies users might employ:
+- Browser extensions that randomize screen properties
+- Virtual machines with customized display settings
+- Privacy-focused browsers that normalize screen-related values
+- Operating system level display scaling adjustments
+
+4. Browser vendor responses:
+- Increasing implementation of privacy-preserving APIs
+- Standardization of certain values across device types
+- Reduction in precision of returned values
+</limitations_and_countermeasures>",
+Limited supercookie test,"<fingerprinting_method>
+The Limited supercookie test method involves creating and detecting persistent identifiers across browser storage mechanisms, specifically:
+
+1. Creating unique identifiers in multiple storage locations:
+- HSTS (HTTP Strict Transport Security) supercookie bits
+- ETags in browser cache
+- TLS session resumption identifiers
+- HPKP (HTTP Public Key Pinning) entries
+
+2. Implementation steps:
+- Generate a unique identifier
+- Split it into binary segments
+- Encode each segment into different storage mechanisms using carefully crafted HTTP responses
+- On subsequent visits, read back these values through timing attacks and specialized detection methods
+- Reconstruct the original identifier by combining retrieved segments
+
+3. Advanced detection through:
+- Measuring HSTS preload list processing times
+- Analyzing TLS handshake patterns
+- Monitoring cache validation behaviors
+</fingerprinting_method>
+
+<strength_explanation>
+This method is particularly strong because:
+
+1. Persistence: The stored identifiers can survive across:
+- Browser restarts
+- Private browsing sessions
+- Some types of browser clearing operations
+
+2. Difficulty to detect:
+- The storage mechanisms used are legitimate security features
+- The fingerprinting process is passive and hard to distinguish from normal browsing
+
+3. Cross-domain tracking capability:
+- Can work across different domains through careful implementation
+- Resistant to common cookie blocking measures
+
+4. High uniqueness:
+- The combination of multiple storage mechanisms creates a more reliable identifier
+- The binary nature of the storage allows for creating large unique identifier spaces
+</strength_explanation>
+
+<limitations_and_countermeasures>
+Limitations:
+
+1. Browser security updates:
+- Modern browsers are increasingly restricting supercookie techniques
+- Some storage mechanisms like HPKP are being deprecated
+
+2. Technical complexity:
+- Requires sophisticated implementation
+- May be unreliable across different browser versions
+
+Countermeasures:
+
+1. Browser-based:
+- Strict HSTS preload list implementations
+- Partitioned browser caches
+- Enhanced TLS session management
+- Regular cache clearing
+
+2. User-based:
+- Using security-focused browsers
+- Implementing browser extensions that clear storage
+- Regular browser data clearing
+- Network-level filtering
+
+The effectiveness of this method is increasingly challenged by modern browser security measures, though it remains a concern for privacy-conscious users.
+</limitations_and_countermeasures>",
+Browser Window Dimensions,"<fingerprinting_method>
+The advanced window dimension fingerprinting method involves:
+
+1. Continuously monitoring multiple dimension-related properties:
+- window.innerWidth/Height
+- window.outerWidth/Height
+- screen.width/height
+- window.devicePixelRatio
+- screen.availWidth/Height
+
+2. Implementing a dynamic event listener for window resize events that:
+- Records the sequence of dimension changes
+- Measures resize timing patterns
+- Tracks aspect ratio preferences
+- Stores common window snap positions
+
+3. Creating a composite signature by:
+- Calculating ratios between different dimension values
+- Recording default zoom levels
+- Detecting presence and size of browser UI elements
+- Analyzing common user window management patterns
+
+4. Correlating dimensions with:
+- Display resolution
+- Operating system window management behaviors
+- Common display configurations
+</fingerprinting_method>
+
+<strength_explanation>
+This method is particularly strong because:
+
+1. High Uniqueness:
+- Window management habits are often user-specific
+- The combination of multiple dimension-related values creates a more unique identifier
+- Resize patterns can indicate user behavior patterns
+
+2. Persistence:
+- Users tend to maintain consistent window management habits
+- Preferred window sizes often remain constant across sessions
+- Device-specific aspects remain stable
+
+3. Difficulty to Spoof:
+- Complex interaction patterns are hard to simulate
+- Real-time dimension changes reflect genuine user behavior
+- Multiple correlated values must be consistently spoofed
+
+4. Behavioral Component:
+- Includes both static and dynamic elements
+- Captures user-specific workflow patterns
+- Incorporates temporal aspects of window management
+</strength_explanation>
+
+<limitations_and_countermeasures>
+Limitations:
+
+1. Variability:
+- Users with multiple monitors may show inconsistent patterns
+- Different activities may require different window sizes
+- OS updates can change window management behaviors
+
+2. Countermeasures:
+- Browsers can randomize reported window dimensions
+- Privacy-focused browsers may standardize window sizes
+- Anti-fingerprinting tools can inject noise into dimension values
+- Users can employ window management tools that mask natural patterns
+
+3. Technical Constraints:
+- Mobile devices offer limited dimension variability
+- Modern responsive design may reduce unique window size patterns
+- Some browsers are implementing privacy-preserving APIs that limit access to precise dimension values
+
+4. Detection:
+- Sophisticated users may detect dimension monitoring
+- Privacy-focused browsers may alert users to dimension tracking attempts
+- Enterprise security tools might block continuous dimension monitoring
+</limitations_and_countermeasures>",
+"HTTP_ACCEPT Headers
+","<fingerprinting_method>
+The HTTP Accept headers fingerprinting method involves analyzing multiple Accept-related headers in combination:
+
+1. Parse and store the following headers:
+- Accept: Content types the browser accepts
+- Accept-Language: Preferred languages
+- Accept-Encoding: Supported compression methods
+- Accept-Charset: Character set preferences
+
+2. Create a normalized string by:
+- Concatenating all Accept headers
+- Standardizing the format (lowercase, removing extra spaces)
+- Sorting values within each header
+- Computing a hash of the resulting string
+
+3. Enhance uniqueness by:
+- Including order sensitivity of language preferences
+- Analyzing q-values (quality values) in Accept headers
+- Detecting unusual or custom Accept values
+- Cross-referencing with known browser profiles
+
+Example implementation:
+```javascript
+function getAcceptFingerprint() {
+    const headers = [
+        navigator.userAgent,
+        navigator.languages.join(','),
+        document.characterSet
+    ].join('|');
+    
+    const acceptTypes = {
+        'accept': document.createElement('canvas').toDataURL().split(';')[0],
+        'accept-encoding': 'gzip, deflate, br',
+        'accept-language': navigator.languages.join(',')
+    };
+    
+    return btoa(JSON.stringify(headers) + JSON.stringify(acceptTypes));
+}
+```
+</fingerprinting_method>
+
+<strength_explanation>
+This method is considered strong for several reasons:
+
+1. High Entropy Value:
+- Accept headers contain multiple data points
+- Language preferences often reflect user's location and settings
+- Encoding preferences can reveal browser version and capabilities
+- Character set preferences add additional uniqueness
+
+2. Difficult to Spoof:
+- Headers are typically set by the browser automatically
+- Modifying Accept headers often requires proxy or specialized tools
+- Inconsistent modifications are easily detectable
+
+3. Stability:
+- Accept headers remain relatively stable across sessions
+- Changes usually indicate significant browser/system modifications
+- Language preferences particularly tend to persist
+
+4. Cross-browser Reliability:
+- Works across different browser engines
+- Provides consistent results across sessions
+- Less affected by browser updates than other methods
+</strength_explanation>
+
+<limitations_and_countermeasures>
+Limitations:
+
+1. Standardization:
+- Modern browsers are becoming more standardized in their Accept headers
+- Some browsers may limit or normalize Accept header values
+- Corporate environments might standardize these settings
+
+2. Privacy Features:
+- Privacy-focused browsers may restrict or randomize Accept headers
+- VPNs and proxies might modify these headers
+- Browser extensions can alter Accept headers
+
+Countermeasures:
+
+1. User-side:
+- Using privacy-focused browsers (like Tor)
+- Employing header-modifying extensions
+- Regular browser profile rotation
+
+2. Browser-side:
+- Header normalization in privacy modes
+- Limiting Accept header information
+- Randomizing certain Accept values
+
+3. Network-level:
+- Proxy servers that sanitize headers
+- VPN services that normalize browser fingerprints
+- Corporate firewalls that standardize headers
+
+The effectiveness of this method may decrease as browsers implement stronger privacy features and users become more privacy-conscious.
+</limitations_and_countermeasures>",
+System Fonts,"<fingerprinting_method>
+The system fonts fingerprinting method involves creating a comprehensive font detection system using JavaScript that:
+
+1. Creates an invisible div element with a baseline text string
+2. Iterates through a large dictionary of known fonts (including OS-specific fonts)
+3. Applies each font to the text and measures rendering characteristics
+4. Uses font fallbacks to detect actual font presence
+5. Creates a hash of available fonts and their rendering behaviors
+
+Example implementation:
+```javascript
+function detectFonts() {
+    const testString = ""mmmmmmmmmmlli"";
+    const baseFonts = [""monospace"", ""sans-serif"", ""serif""];
+    const fontList = [""Arial"", ""Helvetica"", /* extensive list */];
+    
+    const testDiv = document.createElement(""div"");
+    testDiv.style.position = ""absolute"";
+    testDiv.style.visibility = ""hidden"";
+    testDiv.style.fontSize = ""72px"";
+    
+    let fontFingerprint = [];
+    
+    fontList.forEach(font => {
+        let detected = false;
+        for (let baseFont of baseFonts) {
+            testDiv.style.fontFamily = `${font},${baseFont}`;
+            document.body.appendChild(testDiv);
+            const baseWidth = testDiv.offsetWidth;
+            const baseHeight = testDiv.offsetHeight;
+            
+            testDiv.style.fontFamily = baseFont;
+            if (testDiv.offsetWidth !== baseWidth || 
+                testDiv.offsetHeight !== baseHeight) {
+                detected = true;
+            }
+            document.body.removeChild(testDiv);
+        }
+        fontFingerprint.push({font, detected});
+    });
+    
+    return fontFingerprint;
+}
+```
+</fingerprinting_method>
+
+<strength_explanation>
+This method is particularly strong for several reasons:
+
+1. High Uniqueness: System fonts vary significantly between operating systems and user installations, providing high entropy for fingerprinting.
+
+2. Stability: Font installations rarely change, making this identifier relatively stable over time.
+
+3. Difficult to Spoof: While users can install new fonts, accurately spoofing a specific font fingerprint is challenging because:
+   - Font rendering behavior is complex
+   - Operating system-specific fonts are difficult to replicate
+   - Font metrics are affected by multiple system-level factors
+
+4. Cross-browser Consistency: Font detection works across different browsers on the same system, providing consistent identification.
+
+5. Implementation Resilience: The method uses multiple detection techniques (width/height comparison, rendering behavior) to ensure accuracy even when simple detection methods are blocked.
+</strength_explanation>
+
+<limitations_and_countermeasures>
+Limitations and potential countermeasures include:
+
+1. Browser Protections:
+   - Modern browsers may limit font enumeration
+   - Firefox's privacy.resistFingerprinting setting restricts font access
+   - Brave browser provides only system default fonts
+
+2. Technical Limitations:
+   - Performance impact when checking large font lists
+   - Some fonts may return false positives due to fallback behaviors
+   - Virtual machines or containers may have different font sets
+
+3. User Countermeasures:
+   - Font blocking extensions
+   - Custom font configurations
+   - Use of privacy-focused operating systems with limited font sets
+
+4. Evolution of Web Standards:
+   - Increasing adoption of web fonts reduces reliance on system fonts
+   - Future browser APIs may further restrict font enumeration
+   - Privacy-focused browser updates may introduce new limitations
+
+To maintain effectiveness, fingerprinting methods need to continuously adapt to these evolving countermeasures and browser changes.
+</limitations_and_countermeasures>",
+Hash of canvas fingerprint,"<fingerprinting_method>
+The canvas fingerprinting method involves creating a complex HTML5 canvas element with multiple rendering operations:
+
+1. Create a canvas element (500x200 pixels)
+2. Draw multiple elements:
+   - Render text using different fonts and styles
+   - Add geometric shapes with specific gradients
+   - Include Unicode characters
+   - Apply various blend modes and rotations
+3. Add hidden elements like:
+   - WebGL context information
+   - Device-specific color handling
+   - Sub-pixel rendering patterns
+4. Generate a hash using a combination of:
+   - toDataURL() output
+   - getImageData() values
+   - WebGL parameters
+5. Combine with additional entropy sources:
+   - Text rendering differences
+   - Anti-aliasing behavior
+   - Color depth handling
+
+Example implementation:
+```javascript
+function generateCanvasFingerprint() {
+    const canvas = document.createElement('canvas');
+    canvas.width = 500;
+    canvas.height = 200;
+    const ctx = canvas.getContext('2d');
+    
+    // Complex rendering operations
+    ctx.textBaseline = ""alphabetic"";
+    ctx.fillStyle = ""#f60"";
+    ctx.fillRect(125,1,62,20);
+    ctx.fillStyle = ""#069"";
+    ctx.font = ""11pt 'Arial'"";
+    ctx.fillText(""Fingerprint"", 2, 15);
+    ctx.fillStyle = ""rgba(102, 204, 0, 0.7)"";
+    ctx.font = ""18pt 'Georgia'"";
+    ctx.fillText(""Canvas"", 4, 45);
+    
+    // Add WebGL context
+    const gl = canvas.getContext('webgl');
+    const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
+    const vendor = gl.getParameter(debugInfo.UNMASKED_VENDOR_WEBGL);
+    
+    return hashFunction(canvas.toDataURL() + vendor);
+}
+```
+</fingerprinting_method>
+
+<strength_explanation>
+This method is particularly strong for several reasons:
+
+1. High Uniqueness:
+- Canvas rendering is influenced by multiple hardware and software factors
+- Combination of GPU, operating system, and browser creates distinct outputs
+- Sub-pixel rendering variations add additional uniqueness
+
+2. Stability:
+- Results remain consistent across sessions for the same device/browser
+- Hardware-level differences create persistent identifiers
+- Rendering behavior is difficult to change without significant system modifications
+
+3. Complexity:
+- Multiple rendering operations increase the uniqueness of the fingerprint
+- Combined WebGL information adds hardware-specific identifiers
+- Layer of different operations makes spoofing more difficult
+
+4. Performance:
+- Generation is fast and efficient
+- Can be executed without user permission
+- Results can be cached for quick subsequent checks
+</strength_explanation>
+
+<limitations_and_countermeasures>
+Limitations:
+
+1. Browser Protections:
+- Modern browsers may implement canvas fingerprinting protection
+- Some browsers add random noise to canvas operations
+- Privacy-focused browsers might block canvas access entirely
+
+2. User Countermeasures:
+- Canvas blocking extensions
+- Privacy-focused browsers like Tor
+- Virtual machines or containerized browsing
+
+3. Technical Limitations:
+- Hardware changes can alter the fingerprint
+- Display scaling can affect rendering
+- Browser updates may change rendering behavior
+
+Countermeasures:
+- Browser settings to disable canvas access
+- Privacy-focused extensions that return randomized canvas data
+- Use of browser fingerprinting protection features
+- Regular clearing of browser data
+- Use of privacy-focused browsers that standardize canvas output
+
+The effectiveness of this method may decrease as browsers implement stronger privacy protections and users become more aware of fingerprinting techniques.
+</limitations_and_countermeasures>",
+Battery Status API,"<fingerprinting_method>
+The Battery Status API fingerprinting method involves:
+1. Continuously monitoring battery level and charging status at precise intervals
+2. Collecting multiple data points:
+   - charging status (boolean)
+   - charging time
+   - discharging time
+   - battery level (precise float value)
+3. Creating a time-series pattern of battery behavior
+4. Calculating discharge rate patterns specific to device characteristics
+5. Implementing a correlation algorithm that matches these patterns across sessions
+
+Sample code structure:
+```javascript
+function getBatteryFingerprint() {
+    if ('getBattery' in navigator) {
+        navigator.getBattery().then(battery => {
+            const fingerprint = {
+                level: battery.level,
+                charging: battery.charging,
+                chargingTime: battery.chargingTime,
+                dischargingTime: battery.dischargingTime
+            };
+            
+            // Monitor changes
+            battery.addEventListener('levelchange', () => {
+                updateBatteryPattern(battery.level);
+            });
+            
+            // Calculate discharge rate pattern
+            const dischargePattern = calculateDischargePattern(fingerprint);
+            
+            return generateHash(fingerprint, dischargePattern);
+        });
+    }
+}
+```
+</fingerprinting_method>
+
+<strength_explanation>
+This method is particularly strong because:
+1. Battery behavior patterns are highly device-specific due to:
+   - Battery capacity and age
+   - Hardware power consumption characteristics
+   - Usage patterns
+   - Battery wear level
+
+2. High entropy in the collected data:
+   - Float precision of battery level (0.0 to 1.0)
+   - Unique charging/discharging time combinations
+   - Discharge rate variations under different conditions
+
+3. Persistence:
+   - Battery patterns remain consistent for a given device
+   - Patterns are difficult to artificially replicate
+   - Can be correlated across sessions even with other privacy measures in place
+
+4. Real-time monitoring capabilities:
+   - Continuous data collection provides additional verification
+   - Changes in battery status create unique temporal signatures
+</strength_explanation>
+
+<limitations_and_countermeasures>
+Limitations:
+1. API access restrictions:
+   - Many modern browsers have limited or removed Battery Status API access
+   - Requires explicit permission in some browsers
+   - Some browsers return rounded values to reduce precision
+
+2. Variable reliability:
+   - Battery patterns can change with device age
+   - Environmental factors (temperature, usage) affect accuracy
+   - Multiple devices with similar hardware may show similar patterns
+
+Countermeasures:
+1. Browser-level:
+   - Disabling Battery Status API
+   - Providing randomized or normalized values
+   - Reducing precision of reported values
+
+2. User-level:
+   - Using privacy-focused browsers
+   - Installing extensions that block Battery Status API access
+   - Regular clearing of browser data
+
+3. System-level:
+   - Virtual machine usage
+   - Battery calibration tools
+   - Power management software that normalizes battery behavior
+</limitations_and_countermeasures>",
+Keyboard Layout Detection,"<fingerprinting_method>
+The keyboard layout detection method involves creating a comprehensive keyboard mapping profile through the following steps:
+
+1. Utilize the KeyboardEvent.code and KeyboardEvent.key properties to map physical key positions to their corresponding characters
+2. Create an event listener for keydown events that captures:
+   - The mapping between physical key codes and output characters
+   - Dead key combinations and special character sequences
+   - System-level keyboard layouts and IME configurations
+3. Generate a fingerprint hash by:
+   - Recording the full key mapping matrix
+   - Detecting available keyboard layouts through navigator.keyboard.getLayoutMap()
+   - Identifying special character accessibility and input method patterns
+4. Combine this with timestamp analysis of keystroke patterns to create a multi-layered identifier
+
+Sample code snippet:
+```javascript
+async function getKeyboardFingerprint() {
+  const layoutMap = await navigator.keyboard.getLayoutMap();
+  const keyMap = {};
+  
+  layoutMap.forEach((value, key) => {
+    keyMap[key] = value;
+  });
+  
+  return createHash(JSON.stringify({
+    layoutMap: keyMap,
+    hasIME: 'InputMethod' in window,
+    availableLayouts: navigator.languages,
+    keyboardType: detectKeyboardType()
+  }));
+}
+```
+</fingerprinting_method>
+
+<strength_explanation>
+This method is particularly strong for several reasons:
+
+1. High Uniqueness:
+- Keyboard layouts vary significantly across regions, operating systems, and user preferences
+- The combination of physical mapping and IME settings creates highly distinctive profiles
+- Keystroke timing patterns add an additional layer of uniqueness
+
+2. Persistence:
+- Users rarely change their keyboard layouts
+- The configuration typically remains consistent across sessions
+- Physical keyboard characteristics are hardware-dependent
+
+3. Difficulty to Spoof:
+- Requires deep system-level changes to modify
+- Virtual keyboards and emulators often fail to perfectly replicate native keyboard behavior
+- Timing patterns are extremely difficult to artificially reproduce
+
+4. Comprehensive Coverage:
+- Captures both hardware and software aspects of keyboard configuration
+- Includes regional and linguistic indicators
+- Incorporates user behavior patterns
+</strength_explanation>
+
+<limitations_and_countermeasures>
+Limitations:
+1. Requires user interaction to gather complete data
+2. May vary when users switch between different input devices
+3. Some modern browsers restrict keyboard layout detection APIs
+4. Mobile devices with virtual keyboards may provide less reliable data
+
+Countermeasures:
+1. Browser privacy modes that standardize keyboard reporting
+2. Keyboard layout randomization tools
+3. Input method abstraction layers
+4. Privacy-focused browsers that block keyboard fingerprinting APIs
+5. Virtual keyboard solutions that mask physical keyboard characteristics
+
+Users can protect themselves by:
+- Using keyboard layout randomization extensions
+- Employing privacy-focused browsers
+- Using virtual keyboards for sensitive input
+- Regularly switching between different keyboard layouts
+</limitations_and_countermeasures>",
+Font Rendering Differences,"<fingerprinting_method>
+The method involves rendering a set of carefully selected text samples using different font families and analyzing the pixel-perfect differences in their rendering. Here's the specific approach:
+
+1. Create an off-screen canvas element
+2. Render multiple text strings using various font families, sizes, and styles
+3. For each text sample:
+   - Use specific Unicode characters known to have distinct rendering characteristics
+   - Apply sub-pixel positioning by rendering at fractional coordinates
+   - Capture both the width measurements and actual pixel data
+4. Generate a hash of the combined measurements and pixel data
+5. Include additional parameters such as:
+   - Font smoothing settings
+   - Text rendering mode (e.g., LCD optimization)
+   - Device pixel ratio
+   - Text direction and alignment behavior
+
+Example implementation snippet:
+```javascript
+function getFontFingerprint() {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    const testString = ""How quickly daft jumping zebras vex!"";
+    const fonts = ['Arial', 'Times New Roman', 'Courier New'];
+    const measurements = [];
+    
+    fonts.forEach(font => {
+        ctx.font = `16px ""${font}""`;
+        const metrics = ctx.measureText(testString);
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        measurements.push({
+            width: metrics.width,
+            pixelData: imageData.data,
+            fontBounds: metrics.actualBoundingBoxAscent
+        });
+    });
+    
+    return measurements;
+}
+```
+</fingerprinting_method>
+
+<strength_explanation>
+This method is particularly strong for several reasons:
+
+1. High Uniqueness:
+- Font rendering is affected by multiple layers of the system stack (OS, graphics drivers, browser)
+- Sub-pixel rendering creates highly distinctive patterns
+- The combination of multiple fonts and rendering parameters produces a large entropy space
+
+2. Stability:
+- Font rendering remains consistent across browser sessions
+- Changes typically only occur with system updates or hardware changes
+- The fingerprint persists even when users clear their browser data
+
+3. Difficulty to Spoof:
+- Rendering behavior is deeply embedded in the system
+- Attempting to modify font rendering often requires low-level system changes
+- Virtual machines and containers typically preserve the host's rendering characteristics
+
+4. Resistance to Detection:
+- The fingerprinting process appears as normal text rendering
+- Can be disguised as regular website content
+- Difficult for privacy tools to distinguish from legitimate font usage
+</strength_explanation>
+
+<limitations_and_countermeasures>
+Limitations:
+
+1. Performance Impact:
+- Rendering multiple text samples can be computationally intensive
+- May cause noticeable delays on slower devices
+- Canvas operations can trigger browser security warnings
+
+2. Technical Constraints:
+- Requires JavaScript and canvas access
+- Some browsers may block or restrict canvas operations
+- Privacy-focused browsers may intentionally normalize font rendering
+
+Countermeasures:
+
+1. Browser-based:
+- Firefox's privacy.resistFingerprinting setting
+- Brave's fingerprinting protection
+- Canvas fingerprinting blockers
+
+2. System-level:
+- Using system-wide font rendering standardization
+- Disabling sub-pixel rendering
+- Running browsers in containers with standardized font rendering
+
+3. User-implemented:
+- Using privacy-focused operating systems
+- Employing virtual machines with standardized configurations
+- Installing browser extensions that normalize font rendering
+</limitations_and_countermeasures>",
+User Agent,"<fingerprinting_method>
+The method involves parsing and analyzing multiple components of the User Agent string while combining it with additional HTTP headers for enhanced identification:
+
+1. Parse the User Agent string into distinct components:
+   - Operating system and version
+   - Browser type and version
+   - Device information
+   - Architecture
+   - Language preferences
+
+2. Create a composite signature by:
+   - Analyzing the exact formatting and order of User Agent components
+   - Detecting subtle variations in version number formatting
+   - Identifying presence/absence of optional fields
+   - Cross-referencing with Accept-Language and Accept-Encoding headers
+
+3. Implement pattern matching to:
+   - Detect inconsistencies that might indicate spoofing
+   - Compare against known User Agent patterns
+   - Track subtle changes over time
+
+4. Generate a normalized hash of the composite signature for consistent tracking
+</fingerprinting_method>
+
+<strength_explanation>
+This method is particularly strong because:
+
+1. High Uniqueness:
+- User Agent strings contain rich device and browser information
+- The combination with other headers creates highly distinctive patterns
+- Format variations between different browser vendors add additional uniqueness
+
+2. Reliability:
+- User Agent strings are consistently transmitted with every HTTP request
+- Changes in User Agent strings often follow predictable patterns
+- Cross-referencing with other headers helps validate authenticity
+
+3. Persistence:
+- Most users rarely change their browser/OS configuration
+- Even when updated, changes follow traceable patterns
+- The composite signature remains relatively stable across sessions
+
+4. Technical Sophistication:
+- Pattern matching helps detect sophisticated spoofing attempts
+- Normalized hashing provides consistent identification
+- Multiple validation points make it harder to defeat
+</strength_explanation>
+
+<limitations_and_countermeasures>
+Limitations:
+
+1. Browser Evolution:
+- Major browsers are moving towards reducing User Agent string information
+- Chrome and Safari are implementing User Agent reduction initiatives
+- Privacy-focused browsers may provide generic User Agent strings
+
+2. Anti-Fingerprinting Measures:
+- Browser extensions can modify or rotate User Agent strings
+- Privacy-focused browsers like Tor randomize User Agent information
+- VPNs and proxies may modify HTTP headers
+
+Countermeasures:
+
+1. User-Side:
+- Using User Agent spoofing extensions
+- Employing privacy-focused browsers
+- Regular browser rotation or private browsing modes
+
+2. Browser-Side:
+- Client Hints as a replacement for detailed User Agent strings
+- Reduced User Agent string information
+- Built-in privacy protections against fingerprinting
+
+The effectiveness of this method may decrease as browsers continue to implement privacy-preserving features and reduce User Agent string information.
+</limitations_and_countermeasures>",
