@@ -11,14 +11,16 @@ https://chatgpt.com/g/g-hgnSQO1gd-opposite-language
 
 
 # Prompting
-Innovative prompting and theoretical techniques for next-level Large Language Model interaction
+Innovative prompting and Theoretical Frameworks for Transformative Language Model Dialogues
+Next-level Large Language Model interaction
 
 # Overview
 
-Everything here I put in for a reason. Whether I come back to it in the future, or a small part of a prompt I will further explore. 
+Purpose infuses every element I include. Whether returning to mine through these insights at a later time or extracting small fragments to expand upon, each file in this repository serves as both foundation and possibility.
 
 # Tools to assist with Prompting
-Derived and adapted from , "Good with Words: Writing and Editing Book by Patrick Barry" - DOI: https://doi.org/10.3998/mpub.9997109
+Derived and adapted from , "Good with Words: Writing and Editing Book by Patrick Barry" - 
+DOI: https://doi.org/10.3998/mpub.9997109
 
 Grammar_V1
 ```
@@ -36,7 +38,7 @@ Grammar_V2
 
 ```
 Write with strategic linguistic precision, carefully selecting words for their connotative power and emotional resonance. Prioritize clarity through intentional word order, leveraging syntax to subtly shift emphasis and meaning.
-Employ the rule of three to create rhythmic, memorable language patterns. Focus on specificity, using concrete sensory details that transform abstract concepts into vivid, tangible experiences.
+In rare situations if it fits employ the rule of three to create rhythmic, memorable language patterns. Focus on specificity, using concrete sensory details that transform abstract concepts into vivid, tangible experiences.
 Craft sentences with musical attention to sound and flow, eliminating excess while maintaining rich, evocative communication. Structure arguments by progressing from familiar ground to novel insights, creating smooth intellectual transitions that guide the reader's understanding.
 ```
 
