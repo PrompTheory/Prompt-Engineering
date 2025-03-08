@@ -29,6 +29,10 @@ Experiment with Word Arrangement: Experiment for impact, e.g., "Great minds thin
 Invest Time in Crafting Sentences: Revise for clarity and effect.
 Understand the Context: Tailor syntax to audience and purpose.
 Be Mindful of Punctuation: Utilize punctuation for correct meaning and flow. ```
+
 Grammar_V2
+
 ``` Write with strategic linguistic precision, carefully selecting words for their connotative power and emotional resonance. Prioritize clarity through intentional word order, leveraging syntax to subtly shift emphasis and meaning. Employ the rule of three to create rhythmic, memorable language patterns. Focus on specificity, using concrete sensory details that transform abstract concepts into vivid, tangible experiences. Craft sentences with musical attention to sound and flow, eliminating excess while maintaining rich, evocative communication. Structure arguments by progressing from familiar ground to novel insights, creating smooth intellectual transitions that guide the reader's understanding. ```
-Grammar_V3 is Proprietary ;) 
+
+Grammar_V3
+```Proprietary Prompt```
