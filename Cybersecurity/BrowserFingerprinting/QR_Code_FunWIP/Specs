@@ -1,0 +1,31 @@
+Basic Features:
+
+Enter any text or URL to generate a QR code
+Adjust the size of the QR code (100px to 400px)
+Choose from four error correction levels (L, M, Q, H)
+Customize colors for both the dark and light parts of the code
+Adjust the margin around the QR code
+Download your QR code as an SVG file
+
+Advanced Features:
+
+Add a center logo to your QR code (with adjustable size and margin)
+Experimental "Dual QR Code" feature that demonstrates the concept of creating QR codes that might be interpreted differently by different scanners
+
+About the Dual QR Code Feature
+The experimental dual QR code feature shows the concept we discussed earlier. It makes subtle modifications to the QR code that might cause some scanners to interpret it differently than others. This is a simplified demonstration - creating truly dual-interpretable QR codes would require more complex algorithms and precise manipulation of error correction data.
+In a real implementation, you would need to:
+
+Generate two different QR codes
+Analyze their data patterns
+Strategically combine them using the Reed-Solomon error correction properties
+Test extensively with different scanners
+
+Using the Generator
+
+Enter your text in the "Text/URL" field
+Adjust settings as needed
+Click "Generate QR Code"
+Download the SVG if desired
+
+The QR codes generated are actual working codes that can be scanned with any standard QR code reader. The SVG format allows for high-quality printing or further customization if needed.
