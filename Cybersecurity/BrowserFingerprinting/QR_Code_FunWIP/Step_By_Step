@@ -1,0 +1,65 @@
+# QR Code Generation: Step-by-Step Guide
+
+This guide explains how to implement a QR code generator from scratch, focusing on the essential steps a computer scientist should understand.
+
+## 1. Understanding QR Code Structure
+
+QR codes consist of specific structural elements:
+
+- **Finder Patterns**: Three large squares in the corners (top-left, top-right, bottom-left)
+- **Alignment Pattern**: Smaller square (typically bottom-right) for perspective correction
+- **Timing Patterns**: Alternating black/white patterns that define the grid structure
+- **Format Information**: Contains error correction level and mask pattern
+- **Data Region**: The encoded information with redundancy for error correction
+
+## 2. Basic Implementation Steps
+
+### Step 1: Choose a Data Encoding Method
+
+QR codes support multiple encoding modes:
+- **Numeric**: Digits 0-9 (most efficient)
+- **Alphanumeric**: Digits, uppercase letters, and some symbols
+- **Byte**: Any 8-bit data (UTF-8 text, binary data)
+- **Kanji**: Japanese characters
+
+Select the appropriate mode based on your input data.
+
+### Step 2: Convert Data to Binary
+
+Convert the input text to binary following the chosen encoding method. For example, with byte encoding:
+1. Convert each character to its ASCII/UTF-8 value
+2. Convert each value to 8-bit binary
+
+### Step 3: Add Mode Indicator and Length Information
+
+Prepend the binary data with:
+1. **Mode Indicator**: 4 bits that specify the encoding mode
+   - 0001: Numeric
+   - 0010: Alphanumeric
+   - 0100: Byte
+   - 1000: Kanji
+2. **Character Count Indicator**: Length of the data (bit count depends on QR version)
+
+### Step 4: Determine QR Version and Error Correction Level
+
+Based on the data length, choose:
+1. **QR Version**: 1-40 (determines size, from 21×21 to 177×177 modules)
+2. **Error Correction Level**:
+   - L: 7% recovery capacity
+   - M: 15% recovery capacity
+   - Q: 25% recovery capacity
+   - H: 30% recovery capacity
+
+### Step 5: Break Data into Codewords
+
+Divide the bit string into 8-bit groups (codewords).
+
+### Step 6: Add Padding
+
+If necessary, add padding to fill the capacity of the chosen QR version:
+1. Alternate between padding bytes 11101100 and 00010001
+
+### Step 7: Generate Error Correction Codewords
+
+Use Reed-Solomon error correction algorithm:
+1. Generate error correction codewords based on the da
