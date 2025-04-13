@@ -1,0 +1,34 @@
+Creating Multi-Interpretable QR Codes
+1. Exploiting Error Correction
+QR codes have built-in redundancy through Reed-Solomon error correction, with four levels:
+
+Low (L): Recovers from 7% damage
+Medium (M): Recovers from 14% damage
+Quartile (Q): Recovers from 25% damage
+High (H): Recovers from up to 30% damage
+
+This redundancy creates an opportunity: you could intentionally modify up to 30% of a high-redundancy QR code to contain elements of a second message. Different scanners or scanning conditions might then reveal different content depending on how they implement error correction algorithms.
+2. Masking Pattern Manipulation
+QR codes use 8 different masking patterns to ensure optimal scanning. By carefully designing the format information section (which tells scanners which mask to use), you could create a code that works with multiple masking patterns. Different scanners might apply different masks to the same physical code, potentially revealing different content.
+3. Overlay Technique
+This is perhaps the most practical approach:
+
+Create two different QR codes with different content
+Overlay them, keeping the fixed patterns (position markers, timing patterns) aligned
+For pixels that differ between the two codes, strategically choose which to keep
+Use the highest error correction level to compensate for the introduced "errors"
+
+Under different lighting conditions, angles, or with different scanner implementations, the code might reveal different content.
+4. Exploiting Scanner Implementation Differences
+Different QR scanners handle edge cases differently. Some are more aggressive with error correction, while others are more conservative. By carefully crafting a QR code that sits on the boundary of valid interpretation, you could get different results from different scanners.
+Visual Similarity vs. Functional Similarity
+It's worth noting that two QR codes can look nearly identical to humans while containing completely different information. Small differences in critical areas can change the interpretation entirely. This is especially true for QR codes storing minimal data (like short URLs).
+Real-World Feasibility
+While theoretically possible, creating truly dual-purpose QR codes remains challenging:
+
+Fixed structural elements (position markers, timing patterns) must remain intact
+Different scanners are designed to converge on a single interpretation
+Modern QR readers have sophisticated error correction implementations
+
+The most practical approach would be to create visually similar but functionally different QR codes - ones that look nearly identical to humans but contain different data. This is already done in practical applications where QR codes are customized with logos or colors while remaining scannable.
+For malicious purposes, attackers have created deceptive QR codes that appear legitimate but contain harmful links - not by making the code interpret differently, but by making the visual presentation misleading to humans while the QR data itself is consistent.
