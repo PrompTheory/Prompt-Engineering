@@ -81,7 +81,17 @@ Finally, treat this process as an **iterative campaign**. Military psy-ops campa
 In conclusion, **extreme psy-op techniques can be repurposed as extreme personal development tools**. By *weaponizing* influence methods on yourself – breaking your complacent identity, conditioning new habits with rewards and punishments, controlling your inner narrative, and manipulating your environment – you create a potent self-transformational program. All of this must be done with care: maintain ethical boundaries (no truly harmful punishments, no lasting trauma – the aim is **tough love, not self-cruelty**). What you are essentially doing is **running a clandestine operation on your own subconscious**, with the goal of forging a stronger, leaner, more resilient version of you. The "warrior ethos" is not attained passively; it is **programmed** through consistent psychological effort. The resources and cases cited – from CIA manuals to military training guides – show that dramatic changes in behavior and identity are absolutely possible with the right techniques. By learning from the best (and darkest) in the psy-op business and applying those lessons inward, you become both the strategist and the success story of your own personal psy-op campaign.
 
 **Sources:**
-
 - Department of the Army, *Field Manual 3-05.30: Psychological Operations* (2005)  
 - **CIA**, *Psychological Operations in Guerrilla Warfare* (Tayacan Manual, 1984)  
-- **CIA**, *KUBARK Counterintelligence Interrogation
+- **CIA**, *KUBARK Counterintelligence Interrogation* (July 1963, declassified)  
+- **National Defense University**, *China: The Three Warfares* (2013 report)  
+- **DARPA** Narrative Networks Program Summary (2011)  
+- *Scientific Archives*: M. J. Fisher, "Military Training: Does It Predispose to Negative Mental Health Issues?" (2020)  
+- **El País (English)**, "70 years of MKUltra – CIA mind-control program" (Apr 14, 2023)  
+- **Wikipedia** (via FAS/Fedora): "Operation Wandering Soul (Ghost Tape No.10)"  
+- **War on the Rocks**, P. Mattis, "China's 'Three Warfares' in Perspective" (2018)  
+- **Army War College Quarterly (Parameters)**, M. de Goeij, "Reflexive Control: Influencing Strategic Behavior" (2023)  
+- **NDTV**, "Crying Babies, Sonic Booms: Inside Israel's Psychological Warfare in Gaza" (Dec 5, 2024)  
+- **Ynet News**, "Entering the mind of the other side – IDF psychological warfare" (Nov 2023)  
+- **Wikipedia**: "Zersetzung" – East German Stasi technique (references to Directive No.1/76)  
+- **CIA** FOIA – Soviet Active Measures report (1987, FBI/Congressional record)
