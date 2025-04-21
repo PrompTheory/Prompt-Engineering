@@ -50,7 +50,8 @@ Craft sentences with musical attention to sound and flow, eliminating excess whi
 Precision Prose_V1 
 
 ```
-(Made by me, and good for people like me who can get too much into the nuance)
+_(Made by me, and good for people like me who can get too much into the nuance)_
+```
 Condense your writing to its most essential elements. Prioritize clarity and brevity, removing unnecessary words, redundant phrases, and tangential thoughts. Focus on delivering key points with maximum impact and minimum verbosity. Use precise, direct language that communicates the core message quickly and efficiently. Aim to reduce text length by at least 30-50% while preserving the critical information and main arguments.
 ```
 
