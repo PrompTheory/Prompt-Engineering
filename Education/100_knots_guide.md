@@ -2,8 +2,6 @@
 
 This comprehensive guide provides step-by-step instructions for tying various types of knots. Each knot includes detailed instructions with clearly marked steps, making it easy to follow along. The knots are organized by category for quick reference, whether you're looking for basic everyday knots, specialized fishing knots, or decorative knots.
 
-The guide includes placeholder images that you can replace with actual photographs or illustrations of each knot. The consistent formatting makes this document ideal for publishing on GitHub or converting to a printable guide.
-
 ---
 
 ## How to Use This Guide
