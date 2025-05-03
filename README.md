@@ -25,7 +25,7 @@ DOI: https://doi.org/10.3998/mpub.9997109
 
 Read the book and cross-check grammar suggestions from prompts below
 
-With any Grammar Prompt, it can be wonky if you just put a prompt in. For Example, modify and adapt make it clear as custom instructions on ChatGPT, inputted onto claude as a style-guide (5/5 feature) make clear to preface your own writing with modular [Only Edit the following text input with attached style guide] or something like that.
+With any Grammar Prompt, it can be wonky if you just put a prompt in. For Example, modify and adapt as you wish to make it clear. Like as custom instructions on ChatGPT, inputted onto claude as a style-guide to make clear to preface your own writing with modular [Only Edit the following text input with attached style guide] or something like that.
 
 Grammar_V1
 ```
