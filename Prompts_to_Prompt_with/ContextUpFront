@@ -1,0 +1,78 @@
+Context Up Front for Conceptual Grounding
+
+For some, this is common knowledge or just one way of implementing prompt priming through a single conversations context window, but experimenting with this is can just be fun for self experimentation as part of your instinctive (limbic) prompting tool kit.
+
+What you need to do with this part of your tool kit is put the context upfront. This could be a conversation about literally anything. Let’s do a simple example of the classic educational experiment of making a peanut butter and jelly sandwich if you ask the AI model, what is this experiment really doing and you have it tell you what the experiment is doing you can use that context while you continue the conversation.
+
+Example of above:
+
+“What’s the classical educational experiment where you write directions out for peanut jelly and butter sandwich and what is the lesson of it?”
+
+```
+Output: The experiment involves students writing step-by-step instructions for making a peanut butter and jelly sandwich, which a teacher then follows literally. When instructions like "spread peanut butter on bread" are given, the teacher might place the jar on the bread without opening it.
+
+The lesson demonstrates:
+1. The importance of clear, precise communication
+2. Assumptions we make when giving instructions
+3. The gap between what we think we've communicated vs. what we've actually communicated
+
+This exercise is commonly used in programming, technical writing, and science education to teach the value of explicit instructions and the challenges of communicating procedural knowledge.
+```
+Example Follow Up:
+
+Given the context of the above experiment, how would one write those clear directions of setting up their own self ran chat models on ollama for experimentation?
+
+```
+Clear Directions for Setting Up Self-Hosted Chat Models with Ollama
+Given the "PB&J sandwich" lesson about clear instructions, here's a precise guide for setting up chat models on Ollama:
+Step 1: Install Ollama
+
+Open your web browser.
+Navigate to https://ollama.com/download
+Download the version specific to your operating system (Windows, macOS, or Linux).
+Double-click the downloaded file to begin installation.
+Follow the on-screen prompts to complete installation.
+Verify installation by opening a terminal or command prompt and typing: ollama --version
+
+Step 2: Download a Model
+
+Open a terminal or command prompt.
+Type the following command to download a model (example with Llama 2): ollama pull llama2
+Wait for the download to complete. The terminal will show download progress.
+
+Step 3: Run the Model
+
+In the same terminal, type: ollama run llama2
+Wait for the model to load. You'll see a prompt appear.
+Type your question or prompt and press Enter.
+To exit the chat, type /exit or press Ctrl+C.
+
+Step 4: Experiment with Different Models
+
+To see available models, type: ollama list
+To download another model, use: ollama pull [model-name] (e.g., ollama pull mistral)
+Run the new model with: ollama run [model-name]
+
+Step 5: Adjust Parameters (Optional)
+
+To modify generation parameters, use: ollama run [model-name] --system "Your system prompt here" --temperature 0.7
+Adjust temperature (0.0-1.0) to control creativity (lower is more deterministic).
+
+Common Troubleshooting
+
+If Ollama doesn't start, ensure the service is running with: ollama serve
+If a model fails to load, check available disk space and RAM.
+For GPU acceleration, verify your GPU drivers are up-to-date
+```
+
+
+This was just a random EZPZ example to showcase, but it’s up your wildest imagination of setting up the context. 
+
+-context of a long conversation on how different philosophers see the world, and then with your prompt “pull” in the context with clear references to the “totality” or even “assumed sentiment of prior conversation”
+
+- context of how a coffee artisan would view the art of their barista-ship then applying “the same methodology they would use to a {{specific_art_or_craft}}.
+
+- Context priming chat about interpreting a piece of art image input, then asking model to interpret an engineering concept under the guide of the context.  
+
+ 
+
