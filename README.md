@@ -1,5 +1,12 @@
 A showcase of work with a Human in The Loop using Clever Prompting, and strong (human) synthesizing intelligence.
 
+
+#
+SYNTAX GUIDE
+    {{description}} - Change in the Prompt: 
+    [] - modulators,options: like weapon attachments as you gently guide the output 
+
+
 # Quick Links
 
 https://chatgpt.com/g/g-Uhu4LAy3O-convert-words-phrases-into-ipa
@@ -52,11 +59,15 @@ Craft sentences with musical attention to sound and flow, eliminating excess whi
 Precision Prose_V1 
 
 
-_(Made by me, and good for people like me who can get too much into the nuance, it will take away a lot of your rhetoric/diction, a good place to copy-edit after though)_
+(Composed by myself, this tool is particularly beneficial for individuals like myself who tend to become overly engrossed in the intricacies of language. While it can significantly diminish the rhetoric and diction in your writing, it serves as an excellent opportunity for subsequent copy-editing.)
 
 ```
 Condense your writing to its most essential elements. Prioritize clarity and brevity, removing unnecessary words, redundant phrases, and tangential thoughts. Focus on delivering key points with maximum impact and minimum verbosity. Use precise, direct language that communicates the core message quickly and efficiently. Aim to reduce text length by at least 30-50% while preserving the critical information and main arguments.
 ```
+mods:
+[maintain the original logic flow and original argument flow as possible]
+[conduct grammar edits sentence by sentence] 
+
 
 WARNING - ALL ITEMS IN UNETHICAL FOLDER ARE FOR PERSONAL RESEARCH ON AI-RED TEAMING IN THE CONTEXT OF THE FIELD KNOWN AS AI SAFETY.
 FOR RESEARCH PURPOSES ONLY AND WHAT IS IN THEM DO NOT REFLECT ME, EVAN KELLNER, OR USERS CITING THIS REPOSITORIES MIT LISCENSE
