@@ -1,4 +1,4 @@
-Some Text Generations with Clever Prompting, strong (human) synthesizing intelligence.
+A showcase of work with a Human in The Loop using Clever Prompting, and strong (human) synthesizing intelligence.
 
 # Quick Links
 
@@ -13,10 +13,11 @@ https://chatgpt.com/g/g-hgnSQO1gd-opposite-language
 # Prompting
 Innovative prompting and Theoretical Frameworks for Transformative Language Model Dialogues
 Next-level Large Language Model interaction
+Future Proof Prompting
 
 # Overview
 
-Purpose infuses every element I include. Whether returning to mine through these insights at a later time or extracting small fragments to expand upon, each file in this repository serves as both foundation and a future possibility.
+Purpose infuses every element I include. Whether when I return to mine through these insights at a later time or keep extracting small fragments to expand upon, each file in this repository serves as both a foundation, a future possibility, or to be mimiced. 
 
 # Tools to assist with Prompting
 
