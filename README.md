@@ -4,7 +4,7 @@ A showcase of work with a Human in The Loop using Clever Prompting, and strong (
 #
 SYNTAX GUIDE
     {{description}} - Change in the Prompt: 
-    [] - modulators,options: like weapon attachments as you gently guide the output 
+    [] - modulators,options: like weapon attachments as you gently guide the output given base models across the tradewinds
 
 
 # Quick Links
