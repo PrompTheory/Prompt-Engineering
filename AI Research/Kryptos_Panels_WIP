@@ -763,5 +763,267 @@ V V V V / WW / W W / V V / UU UW WVUWUVWUVUUVWUVUWVUVWUWUVUVWUVWUVWUVUWUVWUVWUVW
 (Clock Tower / Big Ben / England)
 
 A Vignere could be hidden by coordinates
+```
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vigenère Analysis - Kryptos</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            background: #0a0a0a;
+            color: #00ff00;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1, h2, h3 {
+            color: #00ff00;
+            text-shadow: 0 0 10px #00ff00;
+        }
+        .section {
+            background: #1a1a1a;
+            border: 1px solid #00ff00;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .key-option {
+            display: inline-block;
+            margin: 5px;
+            padding: 10px;
+            background: #2a2a2a;
+            border: 1px solid #444;
+            cursor: pointer;
+        }
+        .key-option:hover {
+            border-color: #00ff00;
+        }
+        .key-option.active {
+            background: #00ff00;
+            color: #000;
+        }
+        .result-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .segment-box {
+            background: #000;
+            border: 1px solid #333;
+            padding: 10px;
+            font-size: 12px;
+        }
+        .highlight {
+            color: #ffff00;
+            background: #333;
+            padding: 2px;
+        }
+        .pattern {
+            color: #00ffff;
+            font-weight: bold;
+        }
+        .coordinates {
+            background: #1a1a1a;
+            padding: 10px;
+            margin: 10px 0;
+            border-left: 3px solid #00ff00;
+        }
+        input {
+            background: #000;
+            color: #00ff00;
+            border: 1px solid #00ff00;
+            padding: 5px;
+            margin: 0 5px;
+            width: 100px;
+        }
+        button {
+            background: #00ff00;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        button:hover {
+            background: #00cc00;
+        }
+        .decoded-text {
+            background: #000;
+            padding: 15px;
+            margin: 10px 0;
+            border: 1px solid #444;
+            white-space: pre-wrap;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>VIGENÈRE CIPHER ANALYSIS</h1>
+        
+        <div class="section">
+            <h2>Coordinate-Based Keys</h2>
+            <div class="coordinates">
+                <p>Original: 38°57'6.5"N 77°8'44"W</p>
+                <p>Decimal: <span class="highlight">38.95, -77.15</span></p>
+                <p>Key Discovery: 38-15=<span class="pattern">23</span> (W), 77-54=<span class="pattern">23</span> (W) → Key: <span class="pattern">WW</span></p>
+            </div>
+            
+            <h3>Select Key:</h3>
+            <div id="keyOptions"></div>
+            
+            <h3>Custom Key:</h3>
+            <input type="text" id="customKey" placeholder="Enter key">
+            <button onclick="decryptWithCustom()">Decrypt</button>
+        </div>
+
+        <div class="section">
+            <h2>Decryption Results</h2>
+            <div id="results"></div>
+        </div>
+
+        <div class="section">
+            <h2>Pattern Analysis</h2>
+            <div id="patterns"></div>
+        </div>
+    </div>
+
+    <script>
+        const cipherText = "NGHIJLMNQUVWXZKRYPTOSABCDEFGHIJLOHIJLMNQUVWXZKRYPTOSABCDEFGHIJLPIJLMNQUVWXZKRYPTOSABCDEFGHIJLMQJLMNQUVWXZKRYPTOSABCDEFGHIJLMNRLMNQUVWXZKRYPTOSABCDEFGHIJLMNQSMNQUVWXZKRYPTOSABCDEFGHIJLMNQUTNQUVWXZKRYPTOSABCDEFGHIJLMNQUVUQUVWXZKRYPTOSABCDEFGHIJLMNQUVWVUVWXZKRYPTOSABCDEFGHIJLMNQUVWXWVWXZKRYPTOSABCDEFGHIJLMNQUVWXZXWXZKRYPTOSABCDEFGHIJLMNQUVWXZKYXZKRYPTOSABCDEFGHIJLMNQUVWXZKRZZKRYPTOSABCDEFGHIJLMNQUVWXZKRYABCDEFGHIJKLMNOPQRSTUVWXYZABCD";
+        
+        // Coordinate-derived keys
+        const keys = {
+            'WW': 'Primary key from 38-15=23, 77-54=23',
+            'MM': 'From coordinate sum/difference',
+            'MRZP': 'From decimal positions [38,95,77,15]',
+            'MFGFZIS': 'From DMS format',
+            'WWWWWWW': 'Extended WW pattern',
+            'YD': 'From decimal percentages .95→Y, .15→D'
+        };
+        
+        // Vigenère decryption
+        function vigenereDecrypt(text, key) {
+            let result = "";
+            let keyIndex = 0;
+            
+            for (let i = 0; i < text.length; i++) {
+                const char = text[i];
+                if (char >= 'A' && char <= 'Z') {
+                    const charCode = char.charCodeAt(0) - 65;
+                    const keyChar = key[keyIndex % key.length];
+                    const keyCode = keyChar.charCodeAt(0) - 65;
+                    const decrypted = (charCode - keyCode + 26) % 26;
+                    result += String.fromCharCode(decrypted + 65);
+                    keyIndex++;
+                } else {
+                    result += char;
+                }
+            }
+            return result;
+        }
+        
+        // Initialize key options
+        function initKeys() {
+            const container = document.getElementById('keyOptions');
+            Object.entries(keys).forEach(([key, desc]) => {
+                const div = document.createElement('div');
+                div.className = 'key-option';
+                div.innerHTML = `<strong>${key}</strong><br><small>${desc}</small>`;
+                div.onclick = () => selectKey(key);
+                container.appendChild(div);
+            });
+        }
+        
+        // Decrypt with selected key
+        function selectKey(key) {
+            // Update UI
+            document.querySelectorAll('.key-option').forEach(el => el.classList.remove('active'));
+            event.target.closest('.key-option').classList.add('active');
+            
+            // Perform decryption
+            decrypt(key);
+        }
+        
+        function decrypt(key) {
+            const segments = cipherText.split('KRYPTO');
+            const results = document.getElementById('results');
+            const patterns = document.getElementById('patterns');
+            
+            let html = `<h3>Decryption with key: <span class="pattern">${key}</span></h3>`;
+            html += '<div class="result-grid">';
+            
+            let fullDecrypted = '';
+            let changingChars = [];
+            
+            segments.forEach((seg, i) => {
+                if (seg) {
+                    const decrypted = vigenereDecrypt(seg, key);
+                    fullDecrypted += decrypted;
+                    
+                    html += `<div class="segment-box">`;
+                    html += `<strong>Segment ${i}:</strong><br>`;
+                    html += `Original: ${seg}<br>`;
+                    html += `Decrypted: <span class="highlight">${decrypted}</span>`;
+                    
+                    // For WW key, track the changing pattern
+                    if (key === 'WW' && i > 0 && i < segments.length - 1) {
+                        if (decrypted.length > 12) {
+                            changingChars.push(decrypted[12]);
+                        }
+                    }
+                    
+                    html += '</div>';
+                }
+            });
+            
+            html += '</div>';
+            
+            // Show full decrypted text
+            html += '<h3>Full Decrypted Text:</h3>';
+            html += `<div class="decoded-text">${fullDecrypted}</div>`;
+            
+            results.innerHTML = html;
+            
+            // Pattern analysis for WW
+            if (key === 'WW' && changingChars.length > 0) {
+                let patternHtml = '<h3>Pattern Found with WW Key:</h3>';
+                patternHtml += '<p>Each segment changes at position 12:</p>';
+                patternHtml += `<p class="pattern">${changingChars.join(' → ')}</p>`;
+                
+                // Check for message
+                patternHtml += '<p>Possible hidden message in changing characters:</p>';
+                patternHtml += `<p class="highlight">${changingChars.join('')}</p>`;
+                
+                patterns.innerHTML = patternHtml;
+            } else {
+                patterns.innerHTML = '';
+            }
+        }
+        
+        function decryptWithCustom() {
+            const key = document.getElementById('customKey').value.toUpperCase();
+            if (key) {
+                decrypt(key);
+            }
+        }
+        
+        // Initialize
+        initKeys();
+        
+        // Auto-select WW
+        setTimeout(() => {
+            document.querySelector('.key-option').click();
+        }, 100);
+    </script>
+</body>
+</html>
+```
 
 
