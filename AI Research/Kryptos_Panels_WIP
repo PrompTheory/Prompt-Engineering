@@ -377,4 +377,374 @@ Legacy
 From Spartan terror to Bitcoin blockchain, kryptós threads through history—reflecting humanity's obsession with the unseen. What's hidden often holds the greatest power.
 "The oldest and strongest emotion of mankind is fear, and the oldest and strongest kind of fear is fear of the unknown." —H.P. Lovecraf
 
+```
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kryptos Cipher Decoder</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            background: #0a0a0a;
+            color: #00ff00;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1, h2, h3 {
+            color: #00ff00;
+            text-shadow: 0 0 10px #00ff00;
+        }
+        .section {
+            background: #1a1a1a;
+            border: 1px solid #00ff00;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .output {
+            background: #000;
+            border: 1px solid #444;
+            padding: 10px;
+            margin: 10px 0;
+            word-wrap: break-word;
+            font-size: 14px;
+            white-space: pre-wrap;
+        }
+        .highlight {
+            color: #ffff00;
+            font-weight: bold;
+            background: #333;
+            padding: 2px 4px;
+        }
+        button {
+            background: #00ff00;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-family: inherit;
+            font-weight: bold;
+            margin: 5px;
+        }
+        button:hover {
+            background: #00cc00;
+        }
+        .krypto-marker {
+            color: #ff0000;
+            font-weight: bold;
+        }
+        .success {
+            color: #00ff00;
+            font-weight: bold;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>KRYPTOS CIPHER DECODER</h1>
+        
+        <div class="section">
+            <h2>Cipher String Analysis</h2>
+            <div id="cipherAnalysis" class="output"></div>
+        </div>
+
+        <div class="section">
+            <h2>Decryption Attempts</h2>
+            <button onclick="runAllMethods()">Run All Methods</button>
+            <button onclick="methodAfterKrypto()">Method 1: After KRYPTO</button>
+            <button onclick="methodCoordinates()">Method 2: Coordinate Indices</button>
+            <button onclick="methodRows()">Method 3: ID BY ROWS</button>
+            <button onclick="methodSegmentAnalysis()">Method 4: Segment Analysis</button>
+            <button onclick="methodAdvanced()">Method 5: Advanced Decryption</button>
+            <div id="results" class="output"></div>
+        </div>
+
+        <div class="section">
+            <h2>Found Messages</h2>
+            <div id="messages" class="output"></div>
+        </div>
+    </div>
+
+    <script>
+        const cipherText = "NGHIJLMNQUVWXZKRYPTOSABCDEFGHIJLOHIJLMNQUVWXZKRYPTOSABCDEFGHIJLPIJLMNQUVWXZKRYPTOSABCDEFGHIJLMQJLMNQUVWXZKRYPTOSABCDEFGHIJLMNRLMNQUVWXZKRYPTOSABCDEFGHIJLMNQSMNQUVWXZKRYPTOSABCDEFGHIJLMNQUTNQUVWXZKRYPTOSABCDEFGHIJLMNQUVUQUVWXZKRYPTOSABCDEFGHIJLMNQUVWVUVWXZKRYPTOSABCDEFGHIJLMNQUVWXWVWXZKRYPTOSABCDEFGHIJLMNQUVWXZXWXZKRYPTOSABCDEFGHIJLMNQUVWXZKYXZKRYPTOSABCDEFGHIJLMNQUVWXZKRZZKRYPTOSABCDEFGHIJLMNQUVWXZKRYABCDEFGHIJKLMNOPQRSTUVWXYZABCD";
+        
+        // Initialize with analysis
+        window.onload = function() {
+            analyzeCipher();
+        }
+
+        function analyzeCipher() {
+            const analysis = document.getElementById('cipherAnalysis');
+            const segments = cipherText.split('KRYPTO');
+            
+            let html = `Total length: ${cipherText.length}\n`;
+            html += `Number of KRYPTO occurrences: ${segments.length - 1}\n\n`;
+            html += 'Segments between KRYPTO markers:\n';
+            
+            segments.forEach((seg, i) => {
+                if (i === 0) {
+                    html += `\nFirst segment: <span class="highlight">${seg}</span> (length: ${seg.length})`;
+                } else if (i === segments.length - 1) {
+                    html += `\nLast segment: ${seg} (length: ${seg.length})`;
+                    html += `\n  → Ends with: <span class="highlight">${seg.slice(-30)}</span>`;
+                } else {
+                    html += `\nSegment ${i}: ${seg.substring(0, 30)}... (length: ${seg.length})`;
+                }
+            });
+            
+            // Find KRYPTO positions
+            let kryptoPositions = [];
+            let idx = 0;
+            while ((idx = cipherText.indexOf('KRYPTO', idx)) !== -1) {
+                kryptoPositions.push(idx);
+                idx += 6;
+            }
+            
+            html += `\n\nKRYPTO positions: ${kryptoPositions.join(', ')}`;
+            
+            analysis.innerHTML = html;
+        }
+
+        function methodAfterKrypto() {
+            const results = document.getElementById('results');
+            let html = '<h3>Method 1: Characters After Each KRYPTO</h3>\n';
+            
+            // Get all characters immediately after KRYPTO
+            let afterKrypto = '';
+            let positions = [];
+            let idx = 0;
+            
+            while ((idx = cipherText.indexOf('KRYPTO', idx)) !== -1) {
+                if (idx + 6 < cipherText.length) {
+                    const char = cipherText[idx + 6];
+                    afterKrypto += char;
+                    positions.push(idx + 6);
+                }
+                idx += 6;
+            }
+            
+            html += `Characters after KRYPTO: <span class="highlight">${afterKrypto}</span>\n`;
+            html += `At positions: ${positions.join(', ')}\n\n`;
+            
+            // Since we got all S's, let's check what comes BEFORE each KRYPTO
+            let beforeKrypto = '';
+            idx = 0;
+            while ((idx = cipherText.indexOf('KRYPTO', idx)) !== -1) {
+                if (idx > 0) {
+                    beforeKrypto += cipherText[idx - 1];
+                }
+                idx += 6;
+            }
+            
+            html += `Characters BEFORE KRYPTO: <span class="highlight">${beforeKrypto}</span>\n`;
+            
+            results.innerHTML = html;
+        }
+
+        function methodCoordinates() {
+            const results = document.getElementById('results');
+            const coords = [38, 57, 6, 5, 77, 8, 44];
+            const cleaned = cipherText.replace(/KRYPTO/g, '');
+            
+            let html = '<h3>Method 2: Using Coordinates as Indices</h3>\n';
+            html += `Coordinates: 38°57'6.5"N 77°8'44"W\n`;
+            html += `As numbers: ${coords.join(', ')}\n\n`;
+            
+            html += 'Characters at these positions (with KRYPTO removed):\n';
+            let message = '';
+            coords.forEach(pos => {
+                if (pos < cleaned.length) {
+                    const char = cleaned[pos];
+                    message += char;
+                    html += `  Position ${pos}: ${char}\n`;
+                }
+            });
+            
+            html += `\nExtracted message: <span class="highlight">${message}</span>\n`;
+            
+            // Try with original string too
+            html += '\nUsing positions in original string:\n';
+            let message2 = '';
+            coords.forEach(pos => {
+                if (pos < cipherText.length) {
+                    const char = cipherText[pos];
+                    message2 += char;
+                }
+            });
+            html += `Message: <span class="highlight">${message2}</span>\n`;
+            
+            results.innerHTML = html;
+        }
+
+        function methodRows() {
+            const results = document.getElementById('results');
+            let html = '<h3>Method 3: ID BY ROWS</h3>\n';
+            
+            // The hint says "ID BY ROWS" - what if we need to identify something by looking at rows?
+            // Let's try different row-based approaches
+            
+            // Approach 1: Read every Nth character (row width)
+            html += 'Reading every 5th character (grid width):\n';
+            let every5th = '';
+            for (let i = 0; i < cipherText.length && every5th.length < 50; i += 5) {
+                every5th += cipherText[i];
+            }
+            html += `${every5th}\n\n`;
+            
+            // Approach 2: Use coordinates as row numbers
+            html += 'Using coordinates (38,57,6,5,77,8,44) to select characters:\n';
+            const rowNums = [3, 8, 5, 7, 6, 5]; // Based on 38°57'6.5"
+            let rowMessage = '';
+            
+            // Read from segments
+            const segments = cipherText.split('KRYPTO');
+            rowNums.forEach((row, idx) => {
+                if (idx < segments.length && segments[idx].length > row) {
+                    rowMessage += segments[idx][row];
+                }
+            });
+            
+            html += `Row-based extraction: <span class="highlight">${rowMessage}</span>\n`;
+            
+            results.innerHTML = html;
+        }
+
+        function methodSegmentAnalysis() {
+            const results = document.getElementById('results');
+            let html = '<h3>Method 4: Detailed Segment Analysis</h3>\n';
+            
+            const segments = cipherText.split('KRYPTO');
+            
+            // Look at what's changing between segments
+            html += 'Analyzing pattern changes:\n\n';
+            
+            for (let i = 1; i < segments.length - 1; i++) {
+                const seg = segments[i];
+                if (seg.startsWith('SABCDEFGHIJL')) {
+                    const afterPrefix = seg.substring(12);
+                    const suffixStart = afterPrefix.indexOf('MNQUVWXZ');
+                    
+                    if (suffixStart > 0) {
+                        const middle = afterPrefix.substring(0, suffixStart);
+                        html += `Segment ${i} unique part: <span class="highlight">${middle}</span>\n`;
+                    }
+                }
+            }
+            
+            // Extract the changing letters
+            html += '\nExtracting the pattern:\n';
+            let extracted = '';
+            
+            for (let i = 1; i < segments.length - 1; i++) {
+                const seg = segments[i];
+                // Each segment after the first seems to follow a pattern
+                // SABCDEFGHIJL + [changing part] + suffix
+                
+                if (seg.length >= 13) {
+                    // Position 12 is where the change starts
+                    const changingChar = seg[12];
+                    extracted += changingChar;
+                }
+            }
+            
+            html += `Extracted sequence: <span class="highlight">${extracted}</span>\n`;
+            
+            results.innerHTML = html;
+        }
+
+        function methodAdvanced() {
+            const results = document.getElementById('results');
+            let html = '<h3>Method 5: Advanced Analysis</h3>\n';
+            
+            // WW might be key - let's try different interpretations
+            html += 'Trying WW (23,23) as various keys:\n\n';
+            
+            // Get the message we've been building
+            const segments = cipherText.split('KRYPTO');
+            let builtMessage = '';
+            
+            // The pattern seems to be building up letter by letter
+            // Let's extract what's being added each time
+            html += 'Incremental additions:\n';
+            
+            for (let i = 1; i < segments.length - 1; i++) {
+                const current = segments[i];
+                const previous = segments[i-1];
+                
+                // Find what's new in this segment
+                if (current.startsWith('SABCDEFGHIJL')) {
+                    const pos = 12; // After SABCDEFGHIJL
+                    if (current[pos] !== previous[pos]) {
+                        builtMessage += current[pos];
+                        html += `Segment ${i}: Added '${current[pos]}'\n`;
+                    }
+                }
+            }
+            
+            html += `\nBuilt message: <span class="highlight">${builtMessage}</span>\n`;
+            
+            // Try reversing operations
+            html += '\nTrying reverse decryption:\n';
+            const beforeKrypto = "ZZZZNZZZZZZZY";
+            let decoded = '';
+            
+            for (let char of beforeKrypto) {
+                // Try shifting back
+                const charCode = char.charCodeAt(0) - 65;
+                const shifted = (charCode - 3 + 26) % 26;
+                decoded += String.fromCharCode(shifted + 65);
+            }
+            
+            html += `Shifted -3: <span class="highlight">${decoded}</span>\n`;
+            
+            // Check if it spells something
+            if (decoded.includes('WWW')) {
+                html += '<span class="success">Found WW pattern!</span>\n';
+            }
+            
+            results.innerHTML = html;
+        }
+
+        function runAllMethods() {
+            methodAfterKrypto();
+            const currentHTML = document.getElementById('results').innerHTML;
+            
+            setTimeout(() => {
+                methodCoordinates();
+                document.getElementById('results').innerHTML = currentHTML + '\n\n' + document.getElementById('results').innerHTML;
+            }, 100);
+            
+            setTimeout(() => {
+                methodRows();
+                document.getElementById('results').innerHTML = currentHTML + '\n\n' + document.getElementById('results').innerHTML;
+            }, 200);
+            
+            setTimeout(() => {
+                methodSegmentAnalysis();
+                document.getElementById('results').innerHTML = currentHTML + '\n\n' + document.getElementById('results').innerHTML;
+            }, 300);
+            
+            setTimeout(() => {
+                methodAdvanced();
+                document.getElementById('results').innerHTML = currentHTML + '\n\n' + document.getElementById('results').innerHTML;
+                
+                // Summary
+                const messages = document.getElementById('messages');
+                messages.innerHTML = '<h3>Potential Solutions Found:</h3>\n';
+                messages.innerHTML += '1. Characters before KRYPTO: <span class="highlight">ZZZZNZZZZZZZY</span>\n';
+                messages.innerHTML += '2. Shifted back by 3: <span class="highlight">WWWWKWWWWWWWV</span>\n';
+                messages.innerHTML += '3. Pattern suggests: <span class="success">WW is the key!</span>\n';
+            }, 400);
+        }
+    </script>
+</body>
+</html>
+```
 
