@@ -35,3 +35,32 @@ In digital photography, edge detection enables:
 - Scene analysis for automated camera settings
 
 The propensity for accuracy depends on factors like image noise, contrast levels, and the specific algorithm chosen. Modern approaches often combine multiple techniques and use machine learning to improve edge detection in challenging conditions like low light or high noise scenarios.
+Here's how an edge detection tool processes uploaded JPEG/PNG images:
+
+## Image Decoding
+Decode compressed files into raw pixel arrays. JPEG uses lossy compression, PNG uses lossless. Both produce RGB/RGBA values in a 3D array: Image[height][width][channels].
+
+## Preprocessing
+Convert RGB to grayscale: Gray = 0.299×R + 0.587×G + 0.114×B. Apply Gaussian blur to reduce noise.
+
+## Edge Analysis
+Calculate gradients for each pixel (x,y):
+- Horizontal: Gx = I(x+1,y) - I(x-1,y)  
+- Vertical: Gy = I(x,y+1) - I(x,y-1)
+- Edge magnitude: √(Gx² + Gy²)
+- Direction: arctan(Gy/Gx)
+
+Advanced methods include Sobel operators (weighted 3×3 kernels), Canny algorithm (multi-stage with hysteresis), and Laplacian of Gaussian.
+
+## Implementation
+**Upload:** Accept files, validate format/size
+**Processing:** Decode → grayscale → edge detection → output edge map
+**Output:** Generate edge-highlighted image with statistics
+
+## Tool Capabilities
+- Real-time processing via Canvas API or server-side libraries
+- Multiple algorithm options with threshold controls
+- Memory management for large images
+- Parallel processing for speed
+
+The system treats images as mathematical functions I(x,y), detecting edges where intensity changes rapidly. Pixel neighborhoods provide geometric relationships for determining edge characteristics through numerical analysis.
