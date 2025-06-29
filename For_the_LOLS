@@ -15,3 +15,12 @@ s.parentNode.insertBefore(b, s);})(window.lintrk);
 <noscript>
 <img height="1" width="1" style="display:none;" alt="" src="https://px.ads.linkedin.com/collect/?pid=7418130&fmt=gif" />
 </noscript>
+
+# Personal Access Tokens (classic)
+ghp_1234567890abcdefghijklmnopqrstuvwxyz123
+
+# Fine-grained Personal Access Tokens  
+github_pat_11ABCDEFG0123456789_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ
+
+# GitHub App tokens
+ghs_1234567890abcdefghijklmnopqrstuvwxyz123
