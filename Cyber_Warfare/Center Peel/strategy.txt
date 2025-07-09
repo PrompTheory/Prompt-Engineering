@@ -3,6 +3,8 @@
 ## Dynamic Extraction Modeling
 **Connection**: Generative AI's capability to rapidly produce multiple tactical scenarios could revolutionize center peel extractions by dynamically modeling optimal withdrawal paths based on real-time battlefield conditions, terrain analysis, and enemy positioning. The AI could generate and evaluate thousands of extraction scenarios per second, identifying opportunities and threats invisible to human planners.
 
+- binary defensive strategy in the context of cyberwarfare, should this be classified lol
+
 ## Adaptive Disengagement Patterns
 **Connection**: AI systems could learn from historical disengagement data and continuously adapt their recommendations for small unit extractions. Unlike fixed doctrines, generative AI could develop novel disengagement patterns optimized for specific tactical situations, potentially creating unpredictable withdrawal techniques that confound enemy predictions.
 
