@@ -9,7 +9,7 @@ Generative AI could create authentic-seeming distress signals, fragmented commun
 AI systems could generate convincing visual and sensor data showing troop dispersal, abandoned equipment, or chaotic movements - all digitally fabricated to support the narrative of a force falling apart while concealing the actual tactical positioning.
 
 ### 3. Psychological Targeting Through Digital Means
-AI analysis of enemy commanders' psychological profiles could tailor the retreat simulation specifically to exploit their decision-making tendencies, creating irresistible opportunities that appeal to known cognitive biases or previous tactical preferences.
+AI analysis of enemy commanders' psychological profiles could tailor the retreat simulation specifically to exploit their decision-making tendencies, creating irresistible opportunities that appeal to known cognitive biases or previous tactical preferences. 
 
 ### 4. Autonomous Withdrawal Orchestration
 A distributed AI system could coordinate hundreds of autonomous units (drones, unmanned vehicles, etc.) to perform a choreographed ""chaotic"" retreat that appears disorganized to observers but follows precise positioning algorithms designed to lure enemies into predetermined kill zones.
